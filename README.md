@@ -15,3 +15,24 @@ A backend API using Python, Django and PostgresSQL.
     ```shell
     docker compose -f crewtech_api/.docker-compose/base.yml up -d --build
     ```
+
+#### Development Environment:
+- Set Environment Variables:
+  - Copy `crewtech_api/.env.sample/` folder and rename it to `crewtech_api/.env/`.
+  - Update the `crewtech_api/.env/.env.development` file.
+- Run the script to start docker compose:
+  ```shell
+  sh crewtech_scripts/run_development.sh local
+  ```
+- Push to the server:
+  ```shell
+  rsync -r crewtech_api crewtech_scripts/run_development.sh root@server_api_address:/root/crewtech
+  ```
+- Run the script on the server:
+  ```shell
+  ssh root@server_api_address "sh crewtech/run_development.sh"
+  ```
+- Check logs:
+  ```shell
+  ssh root@server_api_address "docker logs crewtech_development_django"
+  ```
