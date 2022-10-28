@@ -1,0 +1,71 @@
+version: '3.9'
+
+services:
+
+  django:
+    image: crewtech_base
+    container_name: crewtech_base_django
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ../.env/.env.base
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - ../:/crewtech_api
+    command: sh -c "chmod +x /crewtech_api/entrypoint.sh && sh /crewtech_api/entrypoint.sh"
+
+  postgres:
+    image: postgres:13-alpine
+    container_name: crewtech_base_postgres
+    env_file:
+      - ../.env/.env.base
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../../.volumes/base/postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: crewtech_base_rabbitmq
+    env_file:
+      - ../.env/.env.base
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ../../.volumes/base/rabbitmq_data:/var/lib/rabbitmq
+
+  redis:
+    image: redis:alpine
+    container_name: crewtech_base_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../../.volumes/base/redis_data:/data
+
+  celery:
+    image: crewtech_base
+    container_name: crewtech_base_celery
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: always
+    command: /opt/venv/bin/celery -A src worker -l INFO
+    env_file:
+      - ../.env/.env.base
+    volumes:
+      - ../:/crewtech_api
+    depends_on:
+      - rabbitmq
+      - redis
+      - django
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  redis_data:
