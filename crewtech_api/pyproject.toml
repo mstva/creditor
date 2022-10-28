@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "crewtech_api"
+version = "0.1.0"
+description = "Crewtech Backend API."
+authors = ["mstva <mustafa.abdulluh@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
