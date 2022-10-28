@@ -18,6 +18,7 @@ provider "digitalocean" {
 locals {
   development = "${var.project_name}-${var.environment.development}"
   staging = "${var.project_name}-${var.environment.staging}"
+  production = "${var.project_name}-${var.environment.production}"
 }
 
 resource "digitalocean_project" "project" {
@@ -77,6 +78,32 @@ module "staging" {
   database_user           = var.database.user
 
   bucket_name             = "${local.staging}-bucket-new"
+  bucket_region           = var.common.region
+
+  project                 = digitalocean_project.project.id
+}
+
+module "production" {
+  source                  = "./modules/production"
+
+  droplet_name            = "${local.production}-server"
+  droplet_image           = var.droplet.image
+  droplet_region          = var.common.region
+  droplet_size            = var.droplet.size
+  droplet_ssh_keys        = [digitalocean_ssh_key.ssh_key.fingerprint]
+  droplet_private_ssh_key = file("${path.module}/.ssh/id_rsa")
+  droplet_scripts         = ["./scripts/install_docker.sh"]
+
+  database_label          = "${local.production}-database"
+  database_engine         = var.database.engine
+  database_version        = var.database.version
+  database_size           = var.database.size
+  database_region         = var.common.region
+  database_node_count     = var.database.node_count
+  database_name           = var.database.name
+  database_user           = var.database.user
+
+  bucket_name             = "${local.production}-bucket-new"
   bucket_region           = var.common.region
 
   project                 = digitalocean_project.project.id

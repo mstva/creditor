@@ -7,3 +7,8 @@ output "staging" {
   value = module.staging
   sensitive = true
 }
+
+output "production" {
+  value = module.production
+  sensitive = true
+}
