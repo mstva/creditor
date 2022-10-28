@@ -8,11 +8,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Check Python Version
-          command: python -V
-      - run:
           name: Set the environment variables
-          command: python crewtech_scripts/set_env_vars.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+          command: python3 crewtech_scripts/set_env_vars.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
           name: Push the code
           command: rsync -r crewtech_api crewtech_scripts/run_development.sh root@$SERVER_IP:/root/crewtech
@@ -27,7 +24,7 @@ jobs:
       - checkout
       - run:
           name: Set the environment variables
-          command: python crewtech_scripts/set_env_vars.py --env=staging --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+          command: python3 crewtech_scripts/set_env_vars.py --env=staging --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
           name: Push the code
           command: rsync -r crewtech_api crewtech_scripts/run_staging.sh root@$SERVER_IP:/root/crewtech
@@ -42,7 +39,7 @@ jobs:
       - checkout
       - run:
           name: Set the environment variables
-          command: python crewtech_scripts/set_env_vars.py --env=production --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+          command: python3 crewtech_scripts/set_env_vars.py --env=production --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
           name: Push the code
           command: rsync -r crewtech_api crewtech_scripts/run_production.sh root@$SERVER_IP:/root/crewtech
