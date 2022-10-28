@@ -8,6 +8,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Check Python Version
+          command: python -V
+      - run:
           name: Set the environment variables
           command: python crewtech_scripts/set_env_vars.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
