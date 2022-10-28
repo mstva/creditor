@@ -16,6 +16,7 @@ variable "environment" {
   type    = map(string)
   default = {
     development = "development",
+    staging     = "staging",
   }
 }
 
