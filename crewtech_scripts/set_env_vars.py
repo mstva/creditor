@@ -20,11 +20,15 @@ env = args.env
 context_id = ""
 
 conn = http.client.HTTPSConnection("circleci.com")
-headers = {"Circle-Token": circle_token}
+headers = {
+    "Circle-Token": circle_token,
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+}
 
 conn.request(
     "GET",
-    f"/api/v2/context?owner-id={owner_id}?page-token={circle_token}",
+    f"/api/v2/context?owner-id={owner_id}",
     headers=headers
 )
 
@@ -40,11 +44,28 @@ conn.request(
     headers=headers
 )
 
-context_environment_variables = json.loads(conn.getresponse().read().decode("utf-8"))
+context_vars = json.loads(conn.getresponse().read().decode("utf-8"))
+
+next_context_vars = {}
+
+if context_vars["next_page_token"]:
+    page_token = context_vars["next_page_token"]
+    conn.request(
+        "GET",
+        f"/api/v2/context/{context_id}/environment-variable?page-token={page_token}",
+        headers=headers
+    )
+    next_context_vars = json.loads(conn.getresponse().read().decode("utf-8"))
+
+env_vars_list = []
+
+for (key, value), (next_key, next_value) in zip(context_vars.items(), next_context_vars.items()):
+    if key == "items" and next_key == "items":
+        env_vars_list = value + next_value
 
 env_vars = ""
 
-for item in context_environment_variables["items"]:
+for item in env_vars_list:
     env_vars += f'{item["variable"]}=${item["variable"]}%s\\n\n'
 
 command = 'mkdir -p crewtech_api/.env;' \
