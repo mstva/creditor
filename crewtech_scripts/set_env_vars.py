@@ -24,7 +24,7 @@ headers = {"Circle-Token": circle_token}
 
 conn.request(
     "GET",
-    f"/api/v2/context?owner-id={owner_id}",
+    f"/api/v2/context?owner-id={owner_id}?page-token={circle_token}",
     headers=headers
 )
 
@@ -36,7 +36,7 @@ for item in context_list["items"]:
 
 conn.request(
     "GET",
-    f"/api/v2/context/{context_id}/environment-variable",
+    f"/api/v2/context/{context_id}/environment-variable?page-token={circle_token}",
     headers=headers
 )
 
