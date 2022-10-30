@@ -26,11 +26,8 @@ headers = {
     "Content-Type": "application/json"
 }
 
-conn.request(
-    "GET",
-    f"/api/v2/context?owner-id={owner_id}",
-    headers=headers
-)
+context_list_url = f"/api/v2/context?owner-id={owner_id}"
+conn.request("GET", context_list_url, headers=headers)
 
 context_list = json.loads(conn.getresponse().read().decode("utf-8"))
 
@@ -38,17 +35,15 @@ for item in context_list["items"]:
     if env in item["name"]:
         context_id = item["id"]
 
-conn.request(
-    "GET",
-    f"/api/v2/context/{context_id}/environment-variable?page-token={circle_token}",
-    headers=headers
-)
+context_vars = f"/api/v2/context/{context_id}/environment-variable?page-token={circle_token}"
+conn.request("GET", context_vars, headers=headers)
 
 context_vars = json.loads(conn.getresponse().read().decode("utf-8"))
 
 next_context_vars = {}
+env_vars_list = []
 
-if context_vars["next_page_token"]:
+if context_vars["next_page_token"] is not None:
     page_token = context_vars["next_page_token"]
     conn.request(
         "GET",
@@ -57,11 +52,16 @@ if context_vars["next_page_token"]:
     )
     next_context_vars = json.loads(conn.getresponse().read().decode("utf-8"))
 
-env_vars_list = []
+    for (key, value), (next_key, next_value) in zip(context_vars.items(), next_context_vars.items()):
+        if key == "items":
+            env_vars_list += value
+        if next_key == "items":
+            env_vars_list += next_value
 
-for (key, value), (next_key, next_value) in zip(context_vars.items(), next_context_vars.items()):
-    if key == "items" and next_key == "items":
-        env_vars_list = value + next_value
+else:
+    for item in context_vars["items"]:
+        env_vars_list.append(item)
+
 
 env_vars = ""
 
