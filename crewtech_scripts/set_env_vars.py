@@ -30,7 +30,7 @@ context_list_url = f"/api/v2/context?owner-id={owner_id}"
 conn.request("GET", context_list_url, headers=headers)
 
 context_list = json.loads(conn.getresponse().read().decode("utf-8"))
-
+print(context_list)
 for item in context_list["items"]:
     if env in item["name"]:
         context_id = item["id"]
