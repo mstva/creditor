@@ -22,7 +22,7 @@ A backend API using Python, Django and PostgresSQL.
   - Update the `crewtech_api/.env/.env.development` file.
 - Run the script to start docker compose:
   ```shell
-  python run_app.py --e=development --l=local
+  python crewtech_scripts/run_app.py --e=development --l=local
   ```
 - Push to the server:
   ```shell
@@ -43,7 +43,7 @@ A backend API using Python, Django and PostgresSQL.
   - Update the `crewtech_api/.env/.env.staging` file.
 - Run the script to start docker compose:
   ```shell
-  python run_app.py --e=staging --l=local
+  python crewtech_scripts/run_app.py --e=staging --l=local
   ```
 - Push to the server:
   ```shell
@@ -64,7 +64,7 @@ A backend API using Python, Django and PostgresSQL.
   - Update the `crewtech_api/.env/.env.production` file.
 - Run the script to start docker compose:
   ```shell
-  python run_app.py --e=production --l=local
+  python crewtech_scripts/run_app.py --e=production --l=local
   ```
 - Push to the server:
   ```shell
@@ -79,7 +79,7 @@ A backend API using Python, Django and PostgresSQL.
   ssh root@server_api_address "docker logs crewtech_production_django"
   ```
 
-#### Rest the server
+#### Rest the server:
 ```shell
 rm -r crewtech
 docker stop $(docker ps -aq)
