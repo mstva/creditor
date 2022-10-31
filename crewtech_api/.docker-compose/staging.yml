@@ -31,6 +31,3 @@ services:
       - ../:/crewtech_api
     depends_on:
       - django
-
-volumes:
-  redis_data:
