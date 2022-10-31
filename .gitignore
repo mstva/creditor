@@ -182,3 +182,6 @@ secrets.auto.tfvars
 backend.hcl
 *.lock.hcl
 poetry.lock
+
+node_modules
+yarn.lock
