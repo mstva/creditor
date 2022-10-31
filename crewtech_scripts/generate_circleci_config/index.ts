@@ -1,5 +1,4 @@
 import {WorkflowJobParameters} from "@circleci/circleci-config-sdk/dist/src/lib/Components/Workflow/types";
-import { join } from 'path';
 
 const CircleCI = require('@circleci/circleci-config-sdk');
 const fs = require('fs');
@@ -34,12 +33,12 @@ const get_steps = (env: string) => {
         },
         push_the_code: {
             name: "Push the code",
-            command: `rsync -r crewtech_api crewtech_scripts/run_${env}.sh root@$SERVER_IP:/root/crewtech`
+            command: `rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech`
 
         },
         run_the_script: {
             name: "Run the script",
-            command: `ssh root@$SERVER_IP 'sh crewtech/run_${env}.sh'`
+            command: `ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=${env}'`
         },
     }
 }

@@ -16,10 +16,10 @@ jobs:
           command: python3 crewtech_scripts/set_env_vars.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
           name: Push the code
-          command: rsync -r crewtech_api crewtech_scripts/run_development.sh root@$SERVER_IP:/root/crewtech
+          command: rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'sh crewtech/run_development.sh'
+          command: ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=development'
   deploy_staging_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -31,10 +31,10 @@ jobs:
           command: python3 crewtech_scripts/set_env_vars.py --env=staging --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
           name: Push the code
-          command: rsync -r crewtech_api crewtech_scripts/run_staging.sh root@$SERVER_IP:/root/crewtech
+          command: rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'sh crewtech/run_staging.sh'
+          command: ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=staging'
   deploy_production_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -46,10 +46,10 @@ jobs:
           command: python3 crewtech_scripts/set_env_vars.py --env=production --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
           name: Push the code
-          command: rsync -r crewtech_api crewtech_scripts/run_production.sh root@$SERVER_IP:/root/crewtech
+          command: rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'sh crewtech/run_production.sh'
+          command: ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=production'
 workflows:
   deploy:
     jobs:

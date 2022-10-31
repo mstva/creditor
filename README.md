@@ -79,11 +79,11 @@ A backend API using Python, Django and PostgresSQL.
   ssh root@server_api_address "docker logs crewtech_production_django"
   ```
 
+#### Rest the server
 ```shell
 rm -r crewtech
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 docker rmi $(docker images -q)
 docker system prune -a -f
-
 ```
