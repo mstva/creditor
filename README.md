@@ -22,15 +22,15 @@ A backend API using Python, Django and PostgresSQL.
   - Update the `crewtech_api/.env/.env.development` file.
 - Run the script to start docker compose:
   ```shell
-  sh crewtech_scripts/run_development.sh local
+  python run_app.py --e=development --l=local
   ```
 - Push to the server:
   ```shell
-  rsync -r crewtech_api crewtech_scripts/run_development.sh root@server_api_address:/root/crewtech
+  rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@server_api_address:/root/crewtech
   ```
 - Run the script on the server:
   ```shell
-  ssh root@server_api_address "sh crewtech/run_development.sh"
+  ssh root@server_api_address "python3 crewtech/run_app.py --e=development"
   ```
 - Check logs:
   ```shell
@@ -43,15 +43,15 @@ A backend API using Python, Django and PostgresSQL.
   - Update the `crewtech_api/.env/.env.staging` file.
 - Run the script to start docker compose:
   ```shell
-  sh crewtech_scripts/run_staging.sh local
+  python run_app.py --e=staging --l=local
   ```
 - Push to the server:
   ```shell
-  rsync -r crewtech_api crewtech_scripts/run_staging.sh root@server_api_address:/root/crewtech
+  rsync -r --progress --stats crewtech_api crewtech_scripts/run_staging.sh root@server_api_address:/root/crewtech
   ```
 - Run the script on the server:
   ```shell
-  ssh root@server_api_address "sh crewtech/run_staging.sh"
+  ssh root@server_api_address "python3 crewtech/run_app.py --e=staging"
   ```
 - Check logs:
   ```shell
@@ -64,18 +64,26 @@ A backend API using Python, Django and PostgresSQL.
   - Update the `crewtech_api/.env/.env.production` file.
 - Run the script to start docker compose:
   ```shell
-  sh crewtech_scripts/run_production.sh local
+  python run_app.py --e=production --l=local
   ```
 - Push to the server:
   ```shell
-  rsync -r crewtech_api crewtech_scripts/run_production.sh root@server_api_address:/root/crewtech
+  rsync -r --progress --stats crewtech_api crewtech_scripts/run_production.sh root@server_api_address:/root/crewtech
   ```
 - Run the script on the server:
   ```shell
-  ssh root@server_api_address "sh crewtech/run_production.sh"
+  ssh root@server_api_address "python3 crewtech/run_app.py --e=production"
   ```
 - Check logs:
   ```shell
   ssh root@server_api_address "docker logs crewtech_production_django"
   ```
 
+```shell
+rm -r crewtech
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+docker rmi $(docker images -q)
+docker system prune -a -f
+
+```
