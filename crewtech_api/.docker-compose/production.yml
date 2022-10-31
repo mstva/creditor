@@ -19,17 +19,6 @@ services:
       - ../:/crewtech_api
     command: sh -c "chmod +x /crewtech_api/entrypoint.sh && sh /crewtech_api/entrypoint.sh"
 
-  rabbitmq:
-    image: rabbitmq:management-alpine
-    container_name: crewtech_production_rabbitmq
-    env_file:
-      - ../.env/.env.production
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    volumes:
-      - ../../.volumes/production/rabbitmq_data:/var/lib/rabbitmq
-
   redis:
     image: redis:alpine
     container_name: crewtech_production_redis
@@ -58,5 +47,4 @@ services:
       - django
 
 volumes:
-  rabbitmq_data:
   redis_data:
