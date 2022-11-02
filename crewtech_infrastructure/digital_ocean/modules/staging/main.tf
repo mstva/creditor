@@ -3,6 +3,9 @@ terraform {
     digitalocean = {
       source  = "digitalocean/digitalocean"
     }
+    cloudamqp = {
+      source = "cloudamqp/cloudamqp"
+    }
   }
 }
 
@@ -57,4 +60,10 @@ resource "digitalocean_project_resources" "project" {
     digitalocean_database_cluster.staging_database.urn,
     digitalocean_spaces_bucket.staging_bucket.urn
   ]
+}
+
+resource "cloudamqp_instance" "staging_rabbitmq" {
+  name = var.rabbitmq_name
+  plan = var.rabbitmq_plan
+  region = var.rabbitmq_region
 }

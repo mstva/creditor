@@ -5,6 +5,10 @@ terraform {
       source  = "digitalocean/digitalocean"
       version = "~> 2.0"
     }
+    cloudamqp = {
+      source = "cloudamqp/cloudamqp"
+      version = "1.20.0"
+    }
   }
   backend "s3" {}
 }
@@ -13,6 +17,10 @@ provider "digitalocean" {
   token             = var.digitalocean.token
   spaces_access_id  = var.digitalocean.spaces_access_id
   spaces_secret_key = var.digitalocean.spaces_secret_key
+}
+
+provider "cloudamqp" {
+  apikey = var.cloudamqp.api_key
 }
 
 locals {
@@ -55,6 +63,10 @@ module "development" {
   bucket_region           = var.common.region
 
   project                 = digitalocean_project.project.id
+
+  rabbitmq_name           = "${local.development}-rabbitmq"
+  rabbitmq_plan           = var.rabbitmq.plan
+  rabbitmq_region         = var.rabbitmq.region
 }
 
 module "staging" {
@@ -81,6 +93,10 @@ module "staging" {
   bucket_region           = var.common.region
 
   project                 = digitalocean_project.project.id
+
+  rabbitmq_name           = "${local.staging}-rabbitmq"
+  rabbitmq_plan           = var.rabbitmq.plan
+  rabbitmq_region         = var.rabbitmq.region
 }
 
 module "production" {
@@ -107,4 +123,8 @@ module "production" {
   bucket_region           = var.common.region
 
   project                 = digitalocean_project.project.id
+
+  rabbitmq_name           = "${local.production}-rabbitmq"
+  rabbitmq_plan           = var.rabbitmq.plan
+  rabbitmq_region         = var.rabbitmq.region
 }

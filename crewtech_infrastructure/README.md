@@ -19,11 +19,18 @@ digitalocean = {
   spaces_secret_key = ""
 }
 
+cloudamqp = {
+  api_key = "",
+}
+
 # How to create new token
 # https://cloud.digitalocean.com/account/api/tokens/new
 
 # How to setup space key
 # https://www.digitalocean.com/community/tutorials/how-to-create-a-digitalocean-space-and-api-key
+
+# Create Cloudamqp API key
+# https://customer.cloudamqp.com/apikeys
 ```
 
 #### 3- Setup Terraform Backend:

@@ -70,4 +70,16 @@ variable "project" {
   type = string
 }
 
+variable "rabbitmq_name" {
+  type = string
+}
+
+variable "rabbitmq_plan" {
+  type = string
+}
+
+variable "rabbitmq_region" {
+  type = string
+}
+
 

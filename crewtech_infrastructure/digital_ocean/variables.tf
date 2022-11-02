@@ -7,6 +7,13 @@ variable "digitalocean" {
   }
 }
 
+variable "cloudamqp" {
+  type    = map(string)
+  default = {
+    api_key = "",
+  }
+}
+
 variable "project_name" {
   type = string
   default = "crewtech"
@@ -45,6 +52,14 @@ variable "database" {
     node_count = ""
     name       = ""
     user       = ""
+  }
+}
+
+variable "rabbitmq" {
+  type    = map(string)
+  default = {
+    plan   = ""
+    region = ""
   }
 }
 

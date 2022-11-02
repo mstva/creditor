@@ -39,3 +39,7 @@ output "SPACE_LOCATION_URL" {
   value = "https://${digitalocean_spaces_bucket.development_bucket.bucket_domain_name}"
 }
 
+output "RABBITMQ_URL" {
+  value = cloudamqp_instance.development_rabbitmq.url
+}
+

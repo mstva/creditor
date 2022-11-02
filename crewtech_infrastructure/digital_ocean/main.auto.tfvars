@@ -15,3 +15,8 @@ database = {
   name       = "crewtech_db"
   user       = "crewtech_user"
 }
+
+rabbitmq = {
+  plan = "lemur"
+  region = "amazon-web-services::eu-central-1"
+}
