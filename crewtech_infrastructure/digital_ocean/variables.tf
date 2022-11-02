@@ -14,6 +14,15 @@ variable "cloudamqp" {
   }
 }
 
+variable "circleci" {
+  type    = map(string)
+  default = {
+    api_token    = ""
+    vcs_type     = ""
+    organization = ""
+  }
+}
+
 variable "project_name" {
   type = string
   default = "crewtech"
@@ -22,6 +31,7 @@ variable "project_name" {
 variable "environment" {
   type    = map(string)
   default = {
+    common = "common",
     development = "development",
     staging     = "staging",
     production  = "production"
@@ -63,5 +73,19 @@ variable "rabbitmq" {
   }
 }
 
+variable "common_env" {
+  type = map(any)
+}
 
+variable "development_env" {
+  type = map(any)
+}
+
+variable "staging_env" {
+  type = map(any)
+}
+
+variable "production_env" {
+  type = map(any)
+}
 

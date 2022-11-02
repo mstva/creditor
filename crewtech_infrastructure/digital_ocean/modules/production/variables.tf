@@ -89,3 +89,11 @@ variable "rabbitmq_plan" {
 variable "rabbitmq_region" {
   type = string
 }
+
+variable "context_name" {
+  type = string
+}
+
+variable "context_env" {
+  type = map(any)
+}
