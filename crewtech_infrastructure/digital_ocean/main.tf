@@ -61,6 +61,8 @@ module "development" {
 
   bucket_name             = "${local.development}-bucket-new"
   bucket_region           = var.common.region
+  bucket_access_id        = var.digitalocean.spaces_access_id
+  bucket_secret_key       = var.digitalocean.spaces_secret_key
 
   project                 = digitalocean_project.project.id
 
@@ -91,6 +93,8 @@ module "staging" {
 
   bucket_name             = "${local.staging}-bucket-new"
   bucket_region           = var.common.region
+  bucket_access_id        = var.digitalocean.spaces_access_id
+  bucket_secret_key       = var.digitalocean.spaces_secret_key
 
   project                 = digitalocean_project.project.id
 
@@ -121,6 +125,8 @@ module "production" {
 
   bucket_name             = "${local.production}-bucket-new"
   bucket_region           = var.common.region
+  bucket_access_id        = var.digitalocean.spaces_access_id
+  bucket_secret_key       = var.digitalocean.spaces_secret_key
 
   project                 = digitalocean_project.project.id
 

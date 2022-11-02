@@ -66,6 +66,14 @@ variable "bucket_region" {
   type = string
 }
 
+variable "bucket_access_id" {
+  type = string
+}
+
+variable "bucket_secret_key" {
+  type = string
+}
+
 variable "project" {
   type = string
 }

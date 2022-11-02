@@ -39,6 +39,14 @@ output "SPACE_LOCATION_URL" {
   value = "https://${digitalocean_spaces_bucket.development_bucket.bucket_domain_name}"
 }
 
+output "SPACE_ACCESS_KEY" {
+  value = var.bucket_access_id
+}
+
+output "SPACE_SECRET_KEY" {
+  value = var.bucket_secret_key
+}
+
 output "RABBITMQ_URL" {
   value = cloudamqp_instance.development_rabbitmq.url
 }
