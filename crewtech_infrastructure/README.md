@@ -23,6 +23,27 @@ cloudamqp = {
   api_key = "",
 }
 
+circleci = {
+  api_token    = ""
+  vcs_type     = ""
+  organization = ""
+}
+
+env_development = {
+  # copy development env variables like this:
+  ENV_VAR = "ENV_VALUE"
+}
+
+env_staging = {
+  # copy staging env variables like this:
+  ENV_VAR = "ENV_VALUE"
+}
+
+env_production = {
+  # copy production env variables like this:
+  ENV_VAR = "ENV_VALUE"
+}
+
 # How to create new token
 # https://cloud.digitalocean.com/account/api/tokens/new
 
@@ -31,6 +52,9 @@ cloudamqp = {
 
 # Create Cloudamqp API key
 # https://customer.cloudamqp.com/apikeys
+
+# Create CircleCI Token
+# https://app.circleci.com/settings/user/tokens
 ```
 
 #### 3- Setup Terraform Backend:
@@ -76,61 +100,4 @@ skip_credentials_validation = true
 - terraform output production
     ```shell
      sh terraform_output.sh production ../crewtech_api/.env/.env.production
-    ```
----
-
-### CircleCI:
-
-#### 1- Setup Secrets:
-- Create a file with the name `secrets.auto.tfvars` under `circleci` folder.
-- Copy the below content inside it and fill the values as mentioned.
-
-```terraform
-api_token = "https://app.circleci.com/settings/user/tokens"
-vcs_type = "github"
-organization = "organization name"
-
-env_development = {
-  # just copy .env.development file here
-}
-
-env_staging = {
-  # just copy .env.staging file here 
-}
-
-env_production = {
-  # just copy .env.production file here
-}
-```
-#### 2- Setup Terraform Backend:
-
-- Create a file and name it to `backend.hcl` under `circleci` folder.
-- Copy the below content inside it and fill the values as mentioned.
-
-```hcl
-bucket = ""
-key    = "circleci/terraform.tfstate"
-region = "region"
-endpoint = "endpoint"
-access_key = "access key"
-secret_key = "secret key"
-skip_credentials_validation = true
-```
-
-#### 3- Run Terraform commands for circleci folder with Docker Compose:
-- terraform init
-    ```shell
-    docker compose run --rm terraform -chdir=circleci init -backend-config=backend.hcl
-    ```
-- terraform plan
-    ```shell
-    docker compose run --rm terraform -chdir=circleci plan
-    ```
-- terraform apply
-    ```shell
-    docker compose run --rm terraform -chdir=circleci apply --auto-approve
-    ```
-- terraform destroy
-    ```shell
-    docker compose run --rm terraform -chdir=circleci destroy --auto-approve
     ```
