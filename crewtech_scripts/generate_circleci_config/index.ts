@@ -78,7 +78,6 @@ const build_job = (env: string) => {
     circleci_config.addJob(job)
     const steps = get_steps(env)
     job.addStep(new CircleCI.commands.Checkout())
-    job.addStep(new CircleCI.commands.SetupRemoteDocker())
     job.addStep(new CircleCI.commands.Run(steps.login_to_docker_hub))
     job.addStep(new CircleCI.commands.Run(steps.build_docker_image))
     job.addStep(new CircleCI.commands.Run(steps.push_to_docker_hub))
