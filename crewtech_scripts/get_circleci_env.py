@@ -68,9 +68,8 @@ env_vars = ""
 for item in env_vars_list:
     env_vars += f'{item["variable"]}=${item["variable"]}%s\\n\n'
 
-command = 'mkdir -p crewtech_api/.env;' \
-          f'touch crewtech_api/.env/.env.{env};' \
-          f'printf "\n{env_vars}" > crewtech_api/.env/.env.{env};'
+command = f'touch .env.{env};' \
+          f'printf "\n{env_vars}" > .env.{env};'
 
 ret = subprocess.run(command, capture_output=True, shell=True)
 print(ret.stdout.decode())

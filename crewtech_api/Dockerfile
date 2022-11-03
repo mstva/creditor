@@ -1,4 +1,4 @@
-FROM python:3.10-slim AS builder
+FROM --platform=linux/amd64 python:3.10-slim AS builder
 
 ARG environment
 
@@ -27,7 +27,7 @@ RUN apt-get update && \
     apt-get -y autoremove && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-FROM python:3.10-slim AS main
+FROM --platform=linux/amd64 python:3.10-slim AS main
 
 COPY --from=builder /opt/venv /opt/venv
 
