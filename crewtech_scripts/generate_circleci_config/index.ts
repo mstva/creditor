@@ -26,26 +26,38 @@ const create_job = (env: string) => {
 }
 
 const get_steps = (env: string) => {
+    const image = "crewtech"
     return {
-        set_environment_variables: {
-            name: "Set the environment variables",
-            command: `python3 crewtech_scripts/set_env_vars.py --env=${env} --token=$CIRCLE_TOKEN --owner=$OWNER_ID`
+        login_to_docker_hub: {
+            name: "Login to docker hub",
+            command: `echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin`
         },
-        push_the_code: {
-            name: "Push the code",
-            command: `rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech`
-
+        build_docker_image: {
+            name: "Build a docker image",
+            command: `docker build -t $DOCKERHUB_USERNAME/${image}:${env} -f crewtech_api/Dockerfile crewtech_api`
+        },
+        push_to_docker_hub: {
+            name: "Push to docker hub",
+            command: `docker push $DOCKERHUB_USERNAME/${image}:${env}`
+        },
+        get_env_vars_from_circleci: {
+            name: "Get the environment variables from CircleCI",
+            command: `python3 crewtech_scripts/get_circleci_env.py --env=${env} --token=$CIRCLE_TOKEN --owner=$OWNER_ID`
+        },
+        copy_env_and_script_to_server: {
+            name: "Copy the env file and run script to the server",
+            command: `rsync .env.${env} crewtech_scripts/run_containers.py root@$SERVER_IP:/root`
         },
         run_the_script: {
             name: "Run the script",
-            command: `ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=${env}'`
+            command: `ssh root@$SERVER_IP 'python3 run_containers.py --env=${env} --image=$DOCKERHUB_USERNAME/${image}'`
         },
     }
 }
 
 const get_parameters = (env: string) => {
     const parameters: WorkflowJobParameters = {
-        context: ["crewtech_common_context", `crewtech_${env}_context`],
+        context: ["crewtech-common-context", `crewtech-${env}-context`],
         filters: {branches: {only: ["main"]}},
     }
 
@@ -66,8 +78,11 @@ const build_job = (env: string) => {
     circleci_config.addJob(job)
     const steps = get_steps(env)
     job.addStep(new CircleCI.commands.Checkout())
-    job.addStep(new CircleCI.commands.Run(steps.set_environment_variables))
-    job.addStep(new CircleCI.commands.Run(steps.push_the_code))
+    job.addStep(new CircleCI.commands.Run(steps.login_to_docker_hub))
+    job.addStep(new CircleCI.commands.Run(steps.build_docker_image))
+    job.addStep(new CircleCI.commands.Run(steps.push_to_docker_hub))
+    job.addStep(new CircleCI.commands.Run(steps.get_env_vars_from_circleci))
+    job.addStep(new CircleCI.commands.Run(steps.copy_env_and_script_to_server))
     job.addStep(new CircleCI.commands.Run(steps.run_the_script))
     deploy_workflow.addJob(job, get_parameters(env))
 }

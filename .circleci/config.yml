@@ -12,14 +12,23 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set the environment variables
-          command: python3 crewtech_scripts/set_env_vars.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+          name: Login to docker hub
+          command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
-          name: Push the code
-          command: rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech
+          name: Build a docker image
+          command: docker build -t $DOCKERHUB_USERNAME/crewtech:development -f crewtech_api/Dockerfile crewtech_api
+      - run:
+          name: Push to docker hub
+          command: docker push $DOCKERHUB_USERNAME/crewtech:development
+      - run:
+          name: Get the environment variables from CircleCI
+          command: python3 crewtech_scripts/get_circleci_env.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+      - run:
+          name: Copy the env file and run script to the server
+          command: rsync .env.development crewtech_scripts/run_containers.py root@$SERVER_IP:/root
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=development'
+          command: ssh root@$SERVER_IP 'python3 run_containers.py --env=development --image=$DOCKERHUB_USERNAME/crewtech'
   deploy_staging_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -27,14 +36,23 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set the environment variables
-          command: python3 crewtech_scripts/set_env_vars.py --env=staging --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+          name: Login to docker hub
+          command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
-          name: Push the code
-          command: rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech
+          name: Build a docker image
+          command: docker build -t $DOCKERHUB_USERNAME/crewtech:staging -f crewtech_api/Dockerfile crewtech_api
+      - run:
+          name: Push to docker hub
+          command: docker push $DOCKERHUB_USERNAME/crewtech:staging
+      - run:
+          name: Get the environment variables from CircleCI
+          command: python3 crewtech_scripts/get_circleci_env.py --env=staging --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+      - run:
+          name: Copy the env file and run script to the server
+          command: rsync .env.staging crewtech_scripts/run_containers.py root@$SERVER_IP:/root
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=staging'
+          command: ssh root@$SERVER_IP 'python3 run_containers.py --env=staging --image=$DOCKERHUB_USERNAME/crewtech'
   deploy_production_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -42,21 +60,30 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set the environment variables
-          command: python3 crewtech_scripts/set_env_vars.py --env=production --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+          name: Login to docker hub
+          command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
-          name: Push the code
-          command: rsync -r --progress --stats crewtech_api crewtech_scripts/run_app.py root@$SERVER_IP:/root/crewtech
+          name: Build a docker image
+          command: docker build -t $DOCKERHUB_USERNAME/crewtech:production -f crewtech_api/Dockerfile crewtech_api
+      - run:
+          name: Push to docker hub
+          command: docker push $DOCKERHUB_USERNAME/crewtech:production
+      - run:
+          name: Get the environment variables from CircleCI
+          command: python3 crewtech_scripts/get_circleci_env.py --env=production --token=$CIRCLE_TOKEN --owner=$OWNER_ID
+      - run:
+          name: Copy the env file and run script to the server
+          command: rsync .env.production crewtech_scripts/run_containers.py root@$SERVER_IP:/root
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'python3 crewtech/run_app.py --e=production'
+          command: ssh root@$SERVER_IP 'python3 run_containers.py --env=production --image=$DOCKERHUB_USERNAME/crewtech'
 workflows:
   deploy:
     jobs:
       - deploy_development_environment:
           context:
-            - crewtech_common_context
-            - crewtech_development_context
+            - crewtech-common-context
+            - crewtech-development-context
           filters:
             branches:
               only:
@@ -64,8 +91,8 @@ workflows:
           requires: []
       - deploy_staging_environment:
           context:
-            - crewtech_common_context
-            - crewtech_staging_context
+            - crewtech-common-context
+            - crewtech-staging-context
           filters:
             branches:
               only:
@@ -74,8 +101,8 @@ workflows:
             - deploy_development_environment
       - deploy_production_environment:
           context:
-            - crewtech_common_context
-            - crewtech_production_context
+            - crewtech-common-context
+            - crewtech-production-context
           filters:
             branches:
               only:
