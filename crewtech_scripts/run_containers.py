@@ -14,12 +14,6 @@ args = parser.parse_args()
 env = args.env
 image = args.image
 
-remove_containers = f'echo "remove_containers";' \
-                    f'docker stop crewtech_django_{env} || true;' \
-                    f'docker rm crewtech_django_{env} || true;' \
-                    f'docker stop crewtech_celery_{env} || true;' \
-                    f'docker rm crewtech_celery_{env} || true'
-
 run_django_container = f'echo "run_django_container";' \
                        f'docker run -d -p 80:8000 ' \
                        f'--env-file .env.{env} ' \
@@ -34,8 +28,7 @@ run_celery_container = f'echo "run_celery_container";' \
                        f'{image}:{env} ' \
                        f'/bin/bash -c "/opt/venv/bin/celery -A src worker -l INFO"'
 
-run_command = f'{remove_containers};' \
-              f'{run_django_container};' \
+run_command = f'{run_django_container};' \
               f'{run_celery_container};'
 
 process = subprocess.run(
