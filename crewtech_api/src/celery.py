@@ -7,8 +7,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.environ.get('DJANGO_SETTINGS_
 
 app = Celery(
     'crewtech_tasks',
-    broker=os.environ.get('CELERY_BROKER_URL'),
-    backend=os.environ.get('CELERY_RESULT_BACKEND'),
+    broker=os.environ.get('CELERY_RABBITMQ_URL'),
+    backend=os.environ.get('CELERY_REDIS_URL'),
 )
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
