@@ -15,8 +15,10 @@ env = args.env
 image = args.image
 
 remove_containers = f'echo "remove_containers";' \
-                    f'docker stop $(docker ps -aq);' \
-                    f'docker rm $(docker ps -aq)'
+                    f'docker stop crewtech_django_{env} || true;' \
+                    f'docker rm crewtech_django_{env} || true;' \
+                    f'docker stop crewtech_celery_{env} || true;' \
+                    f'docker rm crewtech_celery_{env} || true'
 
 run_django_container = f'echo "run_django_container";' \
                        f'docker run -d -p 80:8000 ' \
