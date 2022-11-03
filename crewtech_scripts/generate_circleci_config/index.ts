@@ -42,7 +42,7 @@ const get_steps = (env: string) => {
         },
         get_env_vars_from_circleci: {
             name: "Get the environment variables from CircleCI",
-            command: `python3 crewtech_scripts/get_circleci_env.py --env=${env} --token=$CIRCLE_TOKEN --owner=$OWNER_ID`
+            command: `python3 crewtech_scripts/get_circleci_env.py --env=${env} --token=$CIRCLE_TOKEN --owner=$CIRCLE_OWNER_ID`
         },
         append_docker_username_to_env: {
             name: "Append docker username to env file",

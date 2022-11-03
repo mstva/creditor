@@ -1,14 +1,17 @@
 ## Crewtech Infrastructure using Terraform.
+
 The Crewtech infrastructure on DigitalOcean using Terraform.
 
 ### Setup and Running:
 
 #### 1- Setup SSH:
+
 - Generate an SSH Key.
 - Create a folder with the name `.ssh` under `src` folder.
 - Copy `id_rsa.pub` file to `src/.ssh`.
 
 #### 2- Setup Secrets:
+
 - Create a file with the name `secrets.auto.tfvars` under `src` folder.
 - Copy the below content inside it and fill the values as mentioned.
 
@@ -29,25 +32,32 @@ circleci = {
   organization = ""
 }
 
-env_development = {
-  # copy development env variables like this:
+common_env = {
+  CIRCLE_TOKEN       = ""
+  CIRCLE_OWNER_ID    = ""
+  DOCKERHUB_USERNAME = ""
+  DOCKERHUB_PASS     = ""
+}
+
+development_env = {
+  # copy development environment variables like this
   ENV_VAR = "ENV_VALUE"
 }
 
-env_staging = {
-  # copy staging env variables like this:
+staging_env = {
+  # copy staging environment variables like this
   ENV_VAR = "ENV_VALUE"
 }
 
-env_production = {
-  # copy production env variables like this:
+production_env = {
+  # copy production environment variables like this
   ENV_VAR = "ENV_VALUE"
 }
 
-# How to create new token
+# How to create new token for digital ocean
 # https://cloud.digitalocean.com/account/api/tokens/new
 
-# How to setup space key
+# How to setup space key for digital ocean
 # https://www.digitalocean.com/community/tutorials/how-to-create-a-digitalocean-space-and-api-key
 
 # Create Cloudamqp API key
@@ -63,16 +73,17 @@ env_production = {
 - Copy the below content inside it and fill the values as mentioned.
 
 ```hcl
-bucket = ""
-key    = ""
-region = ""
-endpoint = ""
-access_key = ""
-secret_key = ""
+bucket                      = ""
+key                         = ""
+region                      = ""
+endpoint                    = ""
+access_key                  = ""
+secret_key                  = ""
 skip_credentials_validation = true
 ```
 
 #### 4- Run Terraform commands for src folder with Docker Compose:
+
 - terraform init
     ```shell
     docker compose run --rm terraform -chdir=src init -backend-config=backend.hcl
