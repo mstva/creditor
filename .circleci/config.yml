@@ -24,11 +24,20 @@ jobs:
           name: Get the environment variables from CircleCI
           command: python3 crewtech_scripts/get_circleci_env.py --env=development --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
+          name: Append docker username to env file
+          command: echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" >> .env.development
+      - run:
           name: Copy the env file and run script to the server
           command: rsync .env.development crewtech_scripts/run_containers.py root@$SERVER_IP:/root
       - run:
+          name: Source the env file
+          command: ssh root@$SERVER_IP 'source .env.development'
+      - run:
           name: Run the script
           command: ssh root@$SERVER_IP 'python3 run_containers.py --env=development --image=$DOCKERHUB_USERNAME/crewtech'
+      - run:
+          name: Remove the env file
+          command: ssh root@$SERVER_IP 'rm .env.development'
   deploy_staging_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -48,11 +57,20 @@ jobs:
           name: Get the environment variables from CircleCI
           command: python3 crewtech_scripts/get_circleci_env.py --env=staging --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
+          name: Append docker username to env file
+          command: echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" >> .env.staging
+      - run:
           name: Copy the env file and run script to the server
           command: rsync .env.staging crewtech_scripts/run_containers.py root@$SERVER_IP:/root
       - run:
+          name: Source the env file
+          command: ssh root@$SERVER_IP 'source .env.staging'
+      - run:
           name: Run the script
           command: ssh root@$SERVER_IP 'python3 run_containers.py --env=staging --image=$DOCKERHUB_USERNAME/crewtech'
+      - run:
+          name: Remove the env file
+          command: ssh root@$SERVER_IP 'rm .env.staging'
   deploy_production_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -72,11 +90,20 @@ jobs:
           name: Get the environment variables from CircleCI
           command: python3 crewtech_scripts/get_circleci_env.py --env=production --token=$CIRCLE_TOKEN --owner=$OWNER_ID
       - run:
+          name: Append docker username to env file
+          command: echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" >> .env.production
+      - run:
           name: Copy the env file and run script to the server
           command: rsync .env.production crewtech_scripts/run_containers.py root@$SERVER_IP:/root
       - run:
+          name: Source the env file
+          command: ssh root@$SERVER_IP 'source .env.production'
+      - run:
           name: Run the script
           command: ssh root@$SERVER_IP 'python3 run_containers.py --env=production --image=$DOCKERHUB_USERNAME/crewtech'
+      - run:
+          name: Remove the env file
+          command: ssh root@$SERVER_IP 'rm .env.production'
 workflows:
   deploy:
     jobs:

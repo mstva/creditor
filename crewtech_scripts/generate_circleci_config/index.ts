@@ -44,13 +44,25 @@ const get_steps = (env: string) => {
             name: "Get the environment variables from CircleCI",
             command: `python3 crewtech_scripts/get_circleci_env.py --env=${env} --token=$CIRCLE_TOKEN --owner=$OWNER_ID`
         },
+        append_docker_username_to_env: {
+            name: "Append docker username to env file",
+            command: `echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" >> .env.${env}`
+        },
         copy_env_and_script_to_server: {
             name: "Copy the env file and run script to the server",
             command: `rsync .env.${env} crewtech_scripts/run_containers.py root@$SERVER_IP:/root`
         },
+        source_env_file: {
+            name: "Source the env file",
+            command: `ssh root@$SERVER_IP 'source .env.${env}'`
+        },
         run_the_script: {
             name: "Run the script",
             command: `ssh root@$SERVER_IP 'python3 run_containers.py --env=${env} --image=$DOCKERHUB_USERNAME/${image}'`
+        },
+        remove_env_file: {
+            name: "Remove the env file",
+            command: `ssh root@$SERVER_IP 'rm .env.${env}'`
         },
     }
 }
@@ -82,8 +94,11 @@ const build_job = (env: string) => {
     job.addStep(new CircleCI.commands.Run(steps.build_docker_image))
     job.addStep(new CircleCI.commands.Run(steps.push_to_docker_hub))
     job.addStep(new CircleCI.commands.Run(steps.get_env_vars_from_circleci))
+    job.addStep(new CircleCI.commands.Run(steps.append_docker_username_to_env))
     job.addStep(new CircleCI.commands.Run(steps.copy_env_and_script_to_server))
+    job.addStep(new CircleCI.commands.Run(steps.source_env_file))
     job.addStep(new CircleCI.commands.Run(steps.run_the_script))
+    job.addStep(new CircleCI.commands.Run(steps.remove_env_file))
     deploy_workflow.addJob(job, get_parameters(env))
 }
 
