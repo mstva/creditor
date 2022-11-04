@@ -74,6 +74,30 @@ variable "bucket_secret_key" {
   type = string
 }
 
+variable "kubernetes_name" {
+  type = string
+}
+
+variable "kubernetes_region" {
+  type = string
+}
+
+variable "kubernetes_version" {
+  type = string
+}
+
+variable "kubernetes_node_name" {
+  type = string
+}
+
+variable "kubernetes_node_size" {
+  type = string
+}
+
+variable "kubernetes_node_count" {
+  type = string
+}
+
 variable "project" {
   type = string
 }

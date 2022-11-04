@@ -86,6 +86,14 @@ module "development" {
   bucket_access_id        = var.digitalocean.spaces_access_id
   bucket_secret_key       = var.digitalocean.spaces_secret_key
 
+  kubernetes_name         = "${local.development}-kubernetes"
+  kubernetes_region       = var.common.region
+  kubernetes_version      = var.kubernetes.version
+
+  kubernetes_node_name    = "${local.development}-kubernetes-node"
+  kubernetes_node_size    = var.kubernetes.node_size
+  kubernetes_node_count   = var.kubernetes.node_count
+
   project                 = digitalocean_project.project.id
 
   rabbitmq_name           = "${local.development}-rabbitmq"
@@ -121,6 +129,14 @@ module "staging" {
   bucket_access_id        = var.digitalocean.spaces_access_id
   bucket_secret_key       = var.digitalocean.spaces_secret_key
 
+  kubernetes_name         = "${local.staging}-kubernetes"
+  kubernetes_region       = var.common.region
+  kubernetes_version      = var.kubernetes.version
+
+  kubernetes_node_name    = "${local.staging}-kubernetes-node"
+  kubernetes_node_size    = var.kubernetes.node_size
+  kubernetes_node_count   = var.kubernetes.node_count
+
   project                 = digitalocean_project.project.id
 
   rabbitmq_name           = "${local.staging}-rabbitmq"
@@ -155,6 +171,14 @@ module "production" {
   bucket_region           = var.common.region
   bucket_access_id        = var.digitalocean.spaces_access_id
   bucket_secret_key       = var.digitalocean.spaces_secret_key
+
+  kubernetes_name         = "${local.production}-kubernetes"
+  kubernetes_region       = var.common.region
+  kubernetes_version      = var.kubernetes.version
+
+  kubernetes_node_name    = "${local.production}-kubernetes-node"
+  kubernetes_node_size    = var.kubernetes.node_size
+  kubernetes_node_count   = var.kubernetes.node_count
 
   project                 = digitalocean_project.project.id
 

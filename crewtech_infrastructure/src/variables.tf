@@ -65,6 +65,15 @@ variable "database" {
   }
 }
 
+variable "kubernetes" {
+  type    = map(string)
+  default = {
+    version    = ""
+    node_size  = ""
+    node_count = ""
+  }
+}
+
 variable "rabbitmq" {
   type    = map(string)
   default = {

@@ -43,11 +43,23 @@ resource "digitalocean_spaces_bucket" "development_bucket" {
   region = var.bucket_region
 }
 
+resource "digitalocean_kubernetes_cluster" "development_kubernetes" {
+  name    = var.kubernetes_name
+  region  = var.kubernetes_region
+  version = var.kubernetes_version
+  node_pool {
+    name       = var.kubernetes_node_name
+    size       = var.kubernetes_node_size
+    node_count = var.kubernetes_node_count
+  }
+}
+
 resource "digitalocean_project_resources" "project" {
   project = var.project
   resources = [
     digitalocean_droplet.development_droplet.urn,
     digitalocean_database_cluster.development_database.urn,
-    digitalocean_spaces_bucket.development_bucket.urn
+    digitalocean_spaces_bucket.development_bucket.urn,
+    digitalocean_kubernetes_cluster.development_kubernetes.urn,
   ]
 }
