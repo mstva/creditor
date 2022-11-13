@@ -42,7 +42,7 @@ const get_steps = (env: string) => {
         },
         get_env_vars_from_circleci: {
             name: "Get the environment variables from CircleCI",
-            command: `python3 crewtech_scripts/get_circleci_env.py --env=${env} --token=$CIRCLE_TOKEN --owner=$CIRCLE_OWNER_ID`
+            command: `python3 scripts/get_circleci_env.py --env=${env} --token=$CIRCLE_TOKEN --owner=$CIRCLE_OWNER_ID`
         },
         append_docker_username_to_env: {
             name: "Append docker username to env file",
@@ -50,7 +50,7 @@ const get_steps = (env: string) => {
         },
         copy_env_and_script_to_server: {
             name: "Copy the env file and run script to the server",
-            command: `rsync .env.${env} crewtech_scripts/run_containers.py root@$SERVER_IP:/root`
+            command: `rsync .env.${env} scripts/run_containers.py root@$SERVER_IP:/root`
         },
         run_the_script: {
             name: "Run the script",

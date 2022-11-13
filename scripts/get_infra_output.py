@@ -4,10 +4,11 @@ import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--env", help="Current Environment")
+parser.add_argument("--compose", help="Docker Compose File")
 args = parser.parse_args()
 env = args.env
+compose = args.compose
 
-compose = "crewtech_infrastructure/docker-compose.yml"
 run_command = f'docker compose -f {compose} run --rm terraform -chdir=src output -json {env}'
 
 process = subprocess.run(run_command, shell=True, stdout=subprocess.PIPE)

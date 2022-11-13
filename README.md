@@ -2,7 +2,7 @@
 A backend API using Python, Django and PostgresSQL.
 
 ### Setup the infrastructure:
-- Read `crewtech_infrastructure/README.md` to follow the instructions.
+- Read `infrastructure/README.md` to follow the instructions.
 
 
 ### Run with Docker Locally:
@@ -22,7 +22,7 @@ A backend API using Python, Django and PostgresSQL.
 - **Run the development environment:**
   - Get the environment variables from the infrastructure:
     ```shell
-    python crewtech_scripts/get_infra_output.py --env=development
+    python scripts/get_infra_output.py --env=development --compose=infrastructure/docker-compose.yml
     ```
   - Update the `backend/.env/.env.development` file. 
   - Run docker compose:
@@ -34,7 +34,7 @@ A backend API using Python, Django and PostgresSQL.
 - **Run the staging environment:**
   - Get the environment variables from the infrastructure:
     ```shell
-    python crewtech_scripts/get_infra_output.py --env=staging
+    python scripts/get_infra_output.py --env=staging --compose=infrastructure/docker-compose.yml
     ```
   - Update the `backend/.env/.env.staging` file. 
   - Run docker compose:
@@ -46,7 +46,7 @@ A backend API using Python, Django and PostgresSQL.
 - **Run the production environment:**
   - Get the environment variables from the infrastructure:
     ```shell
-    python crewtech_scripts/get_infra_output.py --env=production
+    python scripts/get_infra_output.py --env=production --compose=infrastructure/docker-compose.yml
     ```
   - Update the `backend/.env/.env.production` file. 
   - Run docker compose:
@@ -55,7 +55,7 @@ A backend API using Python, Django and PostgresSQL.
     ```
     
 ### Setup for deployment:
-- Read `crewtech_scripts/generate_circleci_config/README.md` to generate CircleCI config.yml
+- Read `scripts/generate_circleci_config/README.md` to generate CircleCI config.yml
 
 
 
