@@ -6,7 +6,6 @@ from celery import Celery
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.environ.get('DJANGO_SETTINGS_MODULE'))
 
 app = Celery(
-    'crewtech_tasks',
     broker=os.environ.get('CELERY_RABBITMQ_URL'),
     backend=os.environ.get('CELERY_REDIS_URL'),
 )
