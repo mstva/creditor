@@ -34,7 +34,7 @@ const get_steps = (env: string) => {
         },
         build_docker_image: {
             name: "Build a docker image",
-            command: `docker build -t $DOCKERHUB_USERNAME/${image}:${env} -f crewtech_api/Dockerfile crewtech_api`
+            command: `docker build -t $DOCKERHUB_USERNAME/${image}:${env} -f backend/Dockerfile backend`
         },
         push_to_docker_hub: {
             name: "Push to docker hub",

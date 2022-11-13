@@ -16,8 +16,8 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ../:/crewtech_api
-    command: sh -c "chmod +x /crewtech_api/entrypoint.sh && sh /crewtech_api/entrypoint.sh"
+      - ../:/backend
+    command: sh -c "chmod +x ./entrypoint.sh && sh ./entrypoint.sh"
 
   postgres:
     image: postgres:13-alpine
@@ -27,7 +27,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ../../.volumes/base/postgres_data:/var/lib/postgresql/data
+      - ../../.volumes/postgres_data:/var/lib/postgresql/data
 
   rabbitmq:
     image: rabbitmq:management-alpine
@@ -38,7 +38,7 @@ services:
       - "15672:15672"
       - "5672:5672"
     volumes:
-      - ../../.volumes/base/rabbitmq_data:/var/lib/rabbitmq
+      - ../../.volumes/rabbitmq_data:/var/lib/rabbitmq
 
   redis:
     image: redis:alpine
@@ -46,7 +46,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ../../.volumes/base/redis_data:/data
+      - ../../.volumes/redis_data:/data
 
   celery:
     image: crewtech_base
@@ -59,7 +59,7 @@ services:
     env_file:
       - ../.env/.env.base
     volumes:
-      - ../:/crewtech_api
+      - ../:/backend
     depends_on:
       - rabbitmq
       - redis

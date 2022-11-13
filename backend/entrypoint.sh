@@ -2,7 +2,7 @@
 
 set -e
 
-cd /crewtech_api/
+cd /backend/
 . /opt/venv/bin/activate
 
 echo "[entrypoint.sh] Collect static"

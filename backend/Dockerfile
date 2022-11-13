@@ -31,5 +31,5 @@ FROM --platform=linux/amd64 python:3.10-slim AS main
 
 COPY --from=builder /opt/venv /opt/venv
 
-WORKDIR /crewtech_api
+WORKDIR /backend
 COPY . .

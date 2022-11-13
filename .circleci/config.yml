@@ -16,7 +16,7 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build a docker image
-          command: docker build -t $DOCKERHUB_USERNAME/crewtech:development -f crewtech_api/Dockerfile crewtech_api
+          command: docker build -t $DOCKERHUB_USERNAME/crewtech:development -f backend/Dockerfile backend
       - run:
           name: Push to docker hub
           command: docker push $DOCKERHUB_USERNAME/crewtech:development
@@ -43,7 +43,7 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build a docker image
-          command: docker build -t $DOCKERHUB_USERNAME/crewtech:staging -f crewtech_api/Dockerfile crewtech_api
+          command: docker build -t $DOCKERHUB_USERNAME/crewtech:staging -f backend/Dockerfile backend
       - run:
           name: Push to docker hub
           command: docker push $DOCKERHUB_USERNAME/crewtech:staging
@@ -70,7 +70,7 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build a docker image
-          command: docker build -t $DOCKERHUB_USERNAME/crewtech:production -f crewtech_api/Dockerfile crewtech_api
+          command: docker build -t $DOCKERHUB_USERNAME/crewtech:production -f backend/Dockerfile backend
       - run:
           name: Push to docker hub
           command: docker push $DOCKERHUB_USERNAME/crewtech:production

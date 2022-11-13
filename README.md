@@ -8,14 +8,14 @@ A backend API using Python, Django and PostgresSQL.
 ### Run with Docker Locally:
 
 - **Set the environment variables:**
-  - Copy `crewtech_api/.env.sample/` folder to `crewtech_api/.env/`.
+  - Copy `backend/.env.sample/` folder to `backend/.env/`.
 
 
 - **Run the base environment:**
-  - Update the `crewtech_api/.env/.env.base` file. 
+  - Update the `backend/.env/.env.base` file. 
   - Run docker compose:
     ```shell
-    docker compose -f crewtech_api/.docker-compose/base.yml up -d --build
+    docker compose -f backend/.docker-compose/base.yml up -d --build
     ```
 
 
@@ -24,10 +24,10 @@ A backend API using Python, Django and PostgresSQL.
     ```shell
     python crewtech_scripts/get_infra_output.py --env=development
     ```
-  - Update the `crewtech_api/.env/.env.development` file. 
+  - Update the `backend/.env/.env.development` file. 
   - Run docker compose:
     ```shell
-    docker compose -f crewtech_api/.docker-compose/development.yml up -d --build
+    docker compose -f backend/.docker-compose/development.yml up -d --build
     ```
 
 
@@ -36,10 +36,10 @@ A backend API using Python, Django and PostgresSQL.
     ```shell
     python crewtech_scripts/get_infra_output.py --env=staging
     ```
-  - Update the `crewtech_api/.env/.env.staging` file. 
+  - Update the `backend/.env/.env.staging` file. 
   - Run docker compose:
     ```shell
-    docker compose -f crewtech_api/.docker-compose/staging.yml up -d --build
+    docker compose -f backend/.docker-compose/staging.yml up -d --build
     ```
 
 
@@ -48,10 +48,10 @@ A backend API using Python, Django and PostgresSQL.
     ```shell
     python crewtech_scripts/get_infra_output.py --env=production
     ```
-  - Update the `crewtech_api/.env/.env.production` file. 
+  - Update the `backend/.env/.env.production` file. 
   - Run docker compose:
     ```shell
-    docker compose -f crewtech_api/.docker-compose/production.yml up -d --build
+    docker compose -f backend/.docker-compose/production.yml up -d --build
     ```
     
 ### Setup for deployment:
