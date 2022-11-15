@@ -13,6 +13,28 @@ const resource_class = "large"
 const image = "ubuntu-2204:2022.10.1"
 const ubuntu = new CircleCI.executors.MachineExecutor(resource_class, image)
 
+const run_unit_tests_job = () => {
+    const job = new CircleCI.Job(`run_unit_tests`, ubuntu)
+    circleci_config.addJob(job)
+    job.addStep(new CircleCI.commands.Checkout())
+    job.addStep(new CircleCI.commands.Run({
+        name: "Install Poetry", command: `pip3 install poetry`
+    }))
+    job.addStep(new CircleCI.commands.Run({
+        name: "Install Packages",
+        working_directory: "backend",
+        command: `poetry install`,
+    }))
+    job.addStep(new CircleCI.commands.Run({
+        name: "Run Pytest",
+        working_directory: "backend",
+        command: `pytest`
+    }))
+    return job
+}
+
+deploy_workflow.addJob(run_unit_tests_job(), {filters: {branches: {only: ["main"]}}})
+
 const ENV = {
     DEVELOPMENT: "development",
     STAGING: "staging",
@@ -60,7 +82,7 @@ const get_parameters = (env: string) => {
         filters: {branches: {only: ["main"]}},
     }
 
-    parameters.requires = []
+    parameters.requires = ['run_unit_tests']
 
     if (env === ENV.STAGING) {
         parameters.requires!.push(`deploy_${ENV.DEVELOPMENT}_environment`)

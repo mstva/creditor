@@ -5,6 +5,23 @@
 version: 2.1
 setup: false
 jobs:
+  run_unit_tests:
+    machine:
+      image: ubuntu-2204:2022.10.1
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Install Poetry
+          command: pip3 install poetry
+      - run:
+          name: Install Packages
+          working_directory: backend
+          command: poetry install
+      - run:
+          name: Run Pytest
+          working_directory: backend
+          command: pytest
   deploy_development_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -89,6 +106,11 @@ jobs:
 workflows:
   deploy:
     jobs:
+      - run_unit_tests:
+          filters:
+            branches:
+              only:
+                - main
       - deploy_development_environment:
           context:
             - crewtech-common-context
@@ -97,7 +119,8 @@ workflows:
             branches:
               only:
                 - main
-          requires: []
+          requires:
+            - run_unit_tests
       - deploy_staging_environment:
           context:
             - crewtech-common-context
@@ -107,6 +130,7 @@ workflows:
               only:
                 - main
           requires:
+            - run_unit_tests
             - deploy_development_environment
       - deploy_production_environment:
           context:
@@ -117,4 +141,5 @@ workflows:
               only:
                 - main
           requires:
+            - run_unit_tests
             - deploy_staging_environment
