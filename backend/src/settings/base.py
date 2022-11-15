@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'api',
     # third-party apps
     'storages',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
