@@ -47,7 +47,13 @@ const run_unit_tests_job = () => {
     return job
 }
 
-deploy_workflow.addJob(run_unit_tests_job(), {filters: {branches: {only: ["main"]}}})
+deploy_workflow.addJob(
+    run_unit_tests_job(),
+    {
+        requires: ['crewtech-base-context'],
+        filters: {branches: {only: ["main"]}},
+    }
+)
 
 const ENV = {
     DEVELOPMENT: "development",

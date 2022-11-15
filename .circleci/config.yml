@@ -118,6 +118,8 @@ workflows:
   deploy:
     jobs:
       - run_unit_tests:
+          requires:
+            - crewtech-base-context
           filters:
             branches:
               only:
