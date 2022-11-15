@@ -9,6 +9,8 @@ jobs:
     docker:
       - image: "cimg/python:3.10"
         environment:
+          DJANGO_SETTINGS_MODULE: src.settings.base
+          DJANGO_SECRET_KEY: VdE5DTwf1V47W6Vm6cGvY2N7pcwdbsAHGyUsZSMENpAs4I7s2RZa5W
           DATABASE_NAME: circle_test
           DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
           DATABASE_USER: root
@@ -29,12 +31,12 @@ jobs:
       - run:
           name: Install Poetry
           command: pip3 install poetry
+      - restore_cache:
+          key: 'key: deps1-{{ .Branch }}-{{ checksum "backend/requirements.txt" }}'
       - run:
           name: Export Poetry
           working_directory: backend
           command: poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test
-      - restore_cache:
-          key: 'key: deps1-{{ .Branch }}-{{ checksum "backend/requirements.txt" }}'
       - run:
           name: Install Packages
           working_directory: backend
@@ -133,7 +135,6 @@ workflows:
     jobs:
       - run_unit_tests:
           context:
-            - crewtech-base-context
           filters:
             branches:
               only:
