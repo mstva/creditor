@@ -17,18 +17,32 @@ const run_unit_tests_job = () => {
     const job = new CircleCI.Job(`run_unit_tests`, ubuntu)
     circleci_config.addJob(job)
     job.addStep(new CircleCI.commands.Checkout())
+    job.addStep(new CircleCI.commands.cache.Restore({
+        key: 'key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}'
+    }))
     job.addStep(new CircleCI.commands.Run({
-        name: "Install Poetry", command: `pip3 install poetry`
+        name: "Install Poetry",
+        working_directory: "backend",
+        command: `pip3 install poetry`,
+    }))
+    job.addStep(new CircleCI.commands.Run({
+        name: "Export Poetry",
+        working_directory: "backend",
+        command: `poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test`,
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Install Packages",
         working_directory: "backend",
-        command: `poetry config virtualenvs.create false; poetry install`,
+        command: `python3 -m venv venv; . venv/bin/activate; python -m pip install --upgrade pip; pip install -r requirements.txt;`,
+    }))
+    job.addStep(new CircleCI.commands.cache.Save({
+        key: 'deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}',
+        paths: ['venv']
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Run Pytest",
         working_directory: "backend",
-        command: `pip3 freeze; pytest`
+        command: `. venv/bin/activate; pytest;`
     }))
     return job
 }

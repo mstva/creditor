@@ -11,17 +11,28 @@ jobs:
     resource_class: large
     steps:
       - checkout
+      - restore_cache:
+          key: 'key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}'
       - run:
           name: Install Poetry
+          working_directory: backend
           command: pip3 install poetry
+      - run:
+          name: Export Poetry
+          working_directory: backend
+          command: poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test
       - run:
           name: Install Packages
           working_directory: backend
-          command: poetry config virtualenvs.create false; poetry install
+          command: python3 -m venv venv; . venv/bin/activate; python -m pip install --upgrade pip; pip install -r requirements.txt;
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - venv
       - run:
           name: Run Pytest
           working_directory: backend
-          command: pip3 freeze; pytest
+          command: . venv/bin/activate; pytest;
   deploy_development_environment:
     machine:
       image: ubuntu-2204:2022.10.1
