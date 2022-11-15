@@ -7,23 +7,18 @@ const argv = require('minimist')(process.argv.slice(2));
 const circleci_config = new CircleCI.Config()
 
 const deploy_workflow = new CircleCI.Workflow("deploy")
-
 circleci_config.addWorkflow(deploy_workflow)
+
+const resource_class = "large"
+const image = "ubuntu-2204:2022.10.1"
+const ubuntu = new CircleCI.executors.MachineExecutor(resource_class, image)
 
 const ENV = {
     DEVELOPMENT: "development",
     STAGING: "staging",
     PRODUCTION: "production",
 }
-
-const create_job = (env: string) => {
-    const ubuntu_executor = new CircleCI.executors.MachineExecutor(
-        "large", "ubuntu-2204:2022.10.1"
-    )
-    return new CircleCI.Job(
-        `deploy_${env}_environment`, ubuntu_executor
-    )
-}
+const ENV_LIST = [ENV.DEVELOPMENT, ENV.STAGING, ENV.PRODUCTION]
 
 const get_steps = (env: string) => {
     const image = "crewtech"
@@ -77,28 +72,27 @@ const get_parameters = (env: string) => {
     return parameters
 }
 
-const build_job = (env: string) => {
-    const job = create_job(env)
-    circleci_config.addJob(job)
-    const steps = get_steps(env)
-    job.addStep(new CircleCI.commands.Checkout())
-    job.addStep(new CircleCI.commands.Run(steps.login_to_docker_hub))
-    job.addStep(new CircleCI.commands.Run(steps.build_docker_image))
-    job.addStep(new CircleCI.commands.Run(steps.push_to_docker_hub))
-    job.addStep(new CircleCI.commands.Run(steps.get_env_vars_from_circleci))
-    job.addStep(new CircleCI.commands.Run(steps.append_docker_username_to_env))
-    job.addStep(new CircleCI.commands.Run(steps.copy_env_and_script_to_server))
-    job.addStep(new CircleCI.commands.Run(steps.run_the_script))
-    deploy_workflow.addJob(job, get_parameters(env))
-}
+ENV_LIST.map((env: string) => {
 
-build_job(ENV.DEVELOPMENT)
-build_job(ENV.STAGING)
-build_job(ENV.PRODUCTION)
+    // Deploy Jobs
+    const job = new CircleCI.Job(`deploy_${env}_environment`, ubuntu)
+    circleci_config.addJob(job)
+    job.addStep(new CircleCI.commands.Checkout())
+    job.addStep(new CircleCI.commands.Run(get_steps(env).login_to_docker_hub))
+    job.addStep(new CircleCI.commands.Run(get_steps(env).build_docker_image))
+    job.addStep(new CircleCI.commands.Run(get_steps(env).push_to_docker_hub))
+    job.addStep(new CircleCI.commands.Run(get_steps(env).get_env_vars_from_circleci))
+    job.addStep(new CircleCI.commands.Run(get_steps(env).append_docker_username_to_env))
+    job.addStep(new CircleCI.commands.Run(get_steps(env).copy_env_and_script_to_server))
+    job.addStep(new CircleCI.commands.Run(get_steps(env).run_the_script))
+
+    // Workflow
+    deploy_workflow.addJob(job, get_parameters(env))
+
+})
 
 const yml_config = circleci_config.stringify();
 
-
-fs.writeFileSync(argv.f, yml_config, {flag: 'w',});
+fs.writeFileSync(argv.f, yml_config, {flag: 'w'});
 fs.readFileSync(argv.f, 'utf-8');
 
