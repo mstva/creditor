@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Run Pytest
           working_directory: backend
-          command: ls -a
+          command: ls; pip3 freeze; pytest;
   deploy_development_environment:
     machine:
       image: ubuntu-2204:2022.10.1

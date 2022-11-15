@@ -28,7 +28,7 @@ const run_unit_tests_job = () => {
     job.addStep(new CircleCI.commands.Run({
         name: "Run Pytest",
         working_directory: "backend",
-        command: `ls -a`
+        command: `ls; pip3 freeze; pytest;`
     }))
     return job
 }
