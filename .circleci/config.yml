@@ -6,8 +6,23 @@ version: 2.1
 setup: false
 jobs:
   run_unit_tests:
-    machine:
-      image: ubuntu-2204:2022.10.1
+    docker:
+      - image: "cimg/python:3.10"
+        environment:
+          DATABASE_NAME: circle_test
+          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
+          DATABASE_USER: root
+          DATABASE_PASSWORD: ''
+          DATABASE_PORT: 5432
+          DATABASE_HOST: postgresql://root@localhost/circle_test?sslmode=disable
+      - image: "cimg/postgres:13.8"
+        environment:
+          DATABASE_NAME: circle_test
+          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
+          DATABASE_USER: root
+          DATABASE_PASSWORD: ''
+          DATABASE_PORT: 5432
+          DATABASE_HOST: postgresql://root@localhost/circle_test?sslmode=disable
     resource_class: large
     steps:
       - checkout
