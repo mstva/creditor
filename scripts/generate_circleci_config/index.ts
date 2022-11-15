@@ -19,12 +19,10 @@ const run_unit_tests_job = () => {
     job.addStep(new CircleCI.commands.Checkout())
     job.addStep(new CircleCI.commands.Run({
         name: "Install Poetry",
-        working_directory: "backend",
         command: `pip3 install poetry`,
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Export Poetry",
-        working_directory: "backend",
         command: `poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test`,
     }))
     job.addStep(new CircleCI.commands.cache.Restore({
@@ -32,7 +30,6 @@ const run_unit_tests_job = () => {
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Install Packages",
-        working_directory: "backend",
         command: `python3 -m venv venv; . venv/bin/activate; python -m pip install --upgrade pip; pip install -r requirements.txt;`,
     }))
     job.addStep(new CircleCI.commands.cache.Save({
