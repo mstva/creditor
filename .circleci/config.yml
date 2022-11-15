@@ -11,12 +11,12 @@ jobs:
         environment:
           DJANGO_SETTINGS_MODULE: src.settings.base
           DJANGO_SECRET_KEY: VdE5DTwf1V47W6Vm6cGvY2N7pcwdbsAHGyUsZSMENpAs4I7s2RZa5W
-          DATABASE_NAME: circle_test
+          POSTGRES_DB: circle_test
           DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
-          DATABASE_USER: root
-          DATABASE_PASSWORD: ''
-          DATABASE_PORT: 5432
-          DATABASE_HOST: localhost
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: ''
+          POSTGRES_PORT: 5432
+          POSTGRES_HOST: localhost
       - image: "cimg/postgres:13.8"
         environment:
           DATABASE_NAME: circle_test
@@ -31,12 +31,12 @@ jobs:
       - run:
           name: Install Poetry
           command: pip3 install poetry
-      - restore_cache:
-          key: 'key: deps1-{{ .Branch }}-{{ checksum "backend/requirements.txt" }}'
       - run:
           name: Export Poetry
           working_directory: backend
           command: poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test
+      - restore_cache:
+          key: 'key: deps1-{{ .Branch }}-{{ checksum "backend/requirements.txt" }}'
       - run:
           name: Install Packages
           working_directory: backend
