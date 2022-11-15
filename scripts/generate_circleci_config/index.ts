@@ -23,12 +23,12 @@ const run_unit_tests_job = () => {
     job.addStep(new CircleCI.commands.Run({
         name: "Install Packages",
         working_directory: "backend",
-        command: `poetry install`,
+        command: `poetry config virtualenvs.create false; poetry install`,
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Run Pytest",
         working_directory: "backend",
-        command: `poetry shell; ls; pip3 freeze; pytest;`
+        command: `pytest`
     }))
     return job
 }
