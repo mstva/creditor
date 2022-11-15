@@ -17,9 +17,6 @@ const run_unit_tests_job = () => {
     const job = new CircleCI.Job(`run_unit_tests`, ubuntu)
     circleci_config.addJob(job)
     job.addStep(new CircleCI.commands.Checkout())
-    job.addStep(new CircleCI.commands.cache.Restore({
-        key: 'key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}'
-    }))
     job.addStep(new CircleCI.commands.Run({
         name: "Install Poetry",
         working_directory: "backend",
@@ -29,6 +26,9 @@ const run_unit_tests_job = () => {
         name: "Export Poetry",
         working_directory: "backend",
         command: `poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test`,
+    }))
+    job.addStep(new CircleCI.commands.cache.Restore({
+        key: 'key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}'
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Install Packages",
