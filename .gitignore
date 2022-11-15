@@ -7,6 +7,9 @@ poetry.lock
 .volumes
 migrations
 !migrations/__init__.py
+.pytest_cache
+.cov_html
+.coverage
 
 # infrastructure
 .ssh
