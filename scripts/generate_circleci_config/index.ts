@@ -50,7 +50,7 @@ const run_unit_tests_job = () => {
 deploy_workflow.addJob(
     run_unit_tests_job(),
     {
-        requires: ['crewtech-base-context'],
+        context: ['crewtech-base-context'],
         filters: {branches: {only: ["main"]}},
     }
 )
