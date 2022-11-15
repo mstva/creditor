@@ -134,7 +134,6 @@ workflows:
   deploy:
     jobs:
       - run_unit_tests:
-          context:
           filters:
             branches:
               only:
