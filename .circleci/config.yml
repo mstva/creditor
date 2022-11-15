@@ -14,7 +14,7 @@ jobs:
           DATABASE_USER: root
           DATABASE_PASSWORD: ''
           DATABASE_PORT: 5432
-          DATABASE_HOST: postgresql://root@localhost/circle_test?sslmode=disable
+          DATABASE_HOST: localhost
       - image: "cimg/postgres:13.8"
         environment:
           DATABASE_NAME: circle_test
@@ -22,7 +22,7 @@ jobs:
           DATABASE_USER: root
           DATABASE_PASSWORD: ''
           DATABASE_PORT: 5432
-          DATABASE_HOST: postgresql://root@localhost/circle_test?sslmode=disable
+          DATABASE_HOST: localhost
     resource_class: large
     steps:
       - checkout
