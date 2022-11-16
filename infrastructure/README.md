@@ -39,6 +39,11 @@ common_env = {
   DOCKERHUB_PASS     = ""
 }
 
+base_env = { 
+  # copy base environment variables like this
+  ENV_VAR = "ENV_VALUE"
+}
+
 development_env = {
   # copy development environment variables like this
   ENV_VAR = "ENV_VALUE"

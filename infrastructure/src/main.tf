@@ -35,6 +35,7 @@ provider "circleci" {
 
 locals {
   common = "${var.project_name}-${var.environment.common}"
+  base = "${var.project_name}-${var.environment.base}"
   development = "${var.project_name}-${var.environment.development}"
   staging = "${var.project_name}-${var.environment.staging}"
   production = "${var.project_name}-${var.environment.production}"
@@ -59,6 +60,17 @@ resource "circleci_context_environment_variable" "common_env_variables" {
   variable   = each.key
   value      = each.value
   context_id = circleci_context.common_context.id
+}
+
+resource "circleci_context" "base_context" {
+  name = "${local.base}-context"
+}
+
+resource "circleci_context_environment_variable" "base_env_variables" {
+  for_each   = var.base_env
+  variable   = each.key
+  value      = each.value
+  context_id = circleci_context.base_context.id
 }
 
 module "development" {

@@ -32,6 +32,7 @@ variable "environment" {
   type    = map(string)
   default = {
     common = "common",
+    base = "base",
     development = "development",
     staging     = "staging",
     production  = "production"
@@ -83,6 +84,10 @@ variable "rabbitmq" {
 }
 
 variable "common_env" {
+  type = map(any)
+}
+
+variable "base_env" {
   type = map(any)
 }
 
