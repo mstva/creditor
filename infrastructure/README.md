@@ -4,13 +4,28 @@ The Crewtech infrastructure on DigitalOcean using Terraform.
 
 ### Setup and Running:
 
-#### 1- Setup SSH:
+#### - Setup SSH:
 
 - Generate an SSH Key.
 - Create a folder with the name `.ssh` under `src` folder.
 - Copy `id_rsa.pub` file to `src/.ssh`.
 
-#### 2- Setup Secrets:
+#### - Setup Terraform Backend:
+
+- Create a file and name it to `backend.hcl` under `src` folder.
+- Copy the below content inside it and fill the values as mentioned.
+
+```hcl
+bucket = ""
+key = ""
+region = ""
+endpoint = ""
+access_key = ""
+secret_key = ""
+skip_credentials_validation = true
+```
+
+#### - Setup Secrets:
 
 - Create a file with the name `secrets.auto.tfvars` under `src` folder.
 - Copy the below content inside it and fill the values as mentioned.
@@ -76,22 +91,7 @@ circleci_contexts = {
 # https://app.circleci.com/settings/user/tokens
 ```
 
-#### 3- Setup Terraform Backend:
-
-- Create a file and name it to `backend.hcl` under `src` folder.
-- Copy the below content inside it and fill the values as mentioned.
-
-```hcl
-bucket                      = ""
-key                         = ""
-region                      = ""
-endpoint                    = ""
-access_key                  = ""
-secret_key                  = ""
-skip_credentials_validation = true
-```
-
-#### 4- Run Terraform commands for src folder with Docker Compose:
+#### - Run Terraform commands for src folder with Docker Compose:
 
 - terraform init
     ```shell
