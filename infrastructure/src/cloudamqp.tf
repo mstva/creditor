@@ -10,6 +10,11 @@ module "cloudamqp" {
   region   = var.rabbitmq_common.region
 }
 
+output "cloudamqp" {
+  value = module.cloudamqp
+  sensitive = true
+}
+
 variable "cloudamqp" {
   type    = map(string)
   default = {
