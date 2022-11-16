@@ -8,23 +8,13 @@ jobs:
   run_unit_tests:
     docker:
       - image: "cimg/python:3.10"
-        environment:
-          DJANGO_SETTINGS_MODULE: src.settings.base
-          DJANGO_SECRET_KEY: VdE5DTwf1V47W6Vm6cGvY2N7pcwdbsAHGyUsZSMENpAs4I7s2RZa5W
-          POSTGRES_DB: circle_test
-          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ''
-          POSTGRES_PORT: 5432
-          POSTGRES_HOST: localhost
       - image: "cimg/postgres:13.8"
         environment:
-          DATABASE_NAME: circle_test
-          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
-          DATABASE_USER: postgres
-          DATABASE_PASSWORD: ''
-          DATABASE_PORT: 5432
-          DATABASE_HOST: localhost
+          DATABASE_NAME: $POSTGRES_DB
+          DATABASE_USER: $POSTGRES_USER
+          DATABASE_PASSWORD: $POSTGRES_PASSWORD
+          DATABASE_HOST: $POSTGRES_HOST
+          DATABASE_PORT: $POSTGRES_PORT
     resource_class: large
     steps:
       - checkout
@@ -134,6 +124,8 @@ workflows:
   deploy:
     jobs:
       - run_unit_tests:
+          context:
+            - crewtech-base-context
           filters:
             branches:
               only:
