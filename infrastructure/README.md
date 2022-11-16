@@ -12,7 +12,7 @@ The Crewtech infrastructure on DigitalOcean using Terraform.
 
 #### - Setup Terraform Backend:
 
-- Create a file and name it to `backend.hcl` under `src` folder.
+- Create a file and name it to `.backend.hcl` under `src` folder.
 - Copy the below content inside it and fill the values as mentioned.
 
 ```hcl
@@ -95,7 +95,7 @@ circleci_contexts = {
 
 - terraform init
     ```shell
-    docker compose run --rm terraform -chdir=src init -backend-config=backend.hcl
+    docker compose run --rm terraform -chdir=src init -backend-config=.backend.hcl
     ```
 
 ---

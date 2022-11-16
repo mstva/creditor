@@ -15,7 +15,7 @@ migrations
 .ssh
 .terraform
 .terraform.lock.hcl
-backend.hcl
+.backend.hcl
 secrets.auto.tfvars
 
 # scripts
