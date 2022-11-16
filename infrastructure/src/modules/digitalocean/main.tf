@@ -1,5 +1,12 @@
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+    }
+  }
+}
 
-resource "digitalocean_droplet" "staging_droplet" {
+resource "digitalocean_droplet" "droplet" {
   name     = var.droplet_name
   image    = var.droplet_image
   region   = var.droplet_region
@@ -19,7 +26,7 @@ resource "digitalocean_droplet" "staging_droplet" {
   }
 }
 
-resource "digitalocean_database_cluster" "staging_database" {
+resource "digitalocean_database_cluster" "database" {
   name       = var.database_label
   engine     = var.database_engine
   version    = var.database_version
@@ -28,22 +35,22 @@ resource "digitalocean_database_cluster" "staging_database" {
   node_count = var.database_node_count
 }
 
-resource "digitalocean_database_db" "staging_database_name" {
-  cluster_id = digitalocean_database_cluster.staging_database.id
+resource "digitalocean_database_db" "database_name" {
+  cluster_id = digitalocean_database_cluster.database.id
   name       = var.database_name
 }
 
-resource "digitalocean_database_user" "staging_database_user" {
-  cluster_id = digitalocean_database_cluster.staging_database.id
+resource "digitalocean_database_user" "database_user" {
+  cluster_id = digitalocean_database_cluster.database.id
   name       = var.database_user
 }
 
-resource "digitalocean_spaces_bucket" "staging_bucket" {
+resource "digitalocean_spaces_bucket" "bucket" {
   name   = var.bucket_name
   region = var.bucket_region
 }
 
-resource "digitalocean_kubernetes_cluster" "staging_kubernetes" {
+resource "digitalocean_kubernetes_cluster" "kubernetes" {
   name    = var.kubernetes_name
   region  = var.kubernetes_region
   version = var.kubernetes_version
@@ -57,9 +64,9 @@ resource "digitalocean_kubernetes_cluster" "staging_kubernetes" {
 resource "digitalocean_project_resources" "project" {
   project = var.project
   resources = [
-    digitalocean_droplet.staging_droplet.urn,
-    digitalocean_database_cluster.staging_database.urn,
-    digitalocean_spaces_bucket.staging_bucket.urn,
-    digitalocean_kubernetes_cluster.staging_kubernetes.urn,
+    digitalocean_droplet.droplet.urn,
+    digitalocean_database_cluster.database.urn,
+    digitalocean_spaces_bucket.bucket.urn,
+    digitalocean_kubernetes_cluster.kubernetes.urn,
   ]
 }
