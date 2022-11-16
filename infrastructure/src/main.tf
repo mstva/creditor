@@ -23,10 +23,6 @@ provider "digitalocean" {
   spaces_secret_key = var.digitalocean.spaces_secret_key
 }
 
-provider "cloudamqp" {
-  apikey = var.cloudamqp.api_key
-}
-
 locals {
   common = "${var.project_name}-${var.environment.common}"
   base = "${var.project_name}-${var.environment.base}"
@@ -79,11 +75,6 @@ module "development" {
   kubernetes_node_count   = var.kubernetes.node_count
 
   project                 = digitalocean_project.project.id
-
-  rabbitmq_name           = "${local.development}-rabbitmq"
-  rabbitmq_plan           = var.rabbitmq.plan
-  rabbitmq_region         = var.rabbitmq.region
-
 }
 
 module "staging" {
@@ -120,11 +111,6 @@ module "staging" {
   kubernetes_node_count   = var.kubernetes.node_count
 
   project                 = digitalocean_project.project.id
-
-  rabbitmq_name           = "${local.staging}-rabbitmq"
-  rabbitmq_plan           = var.rabbitmq.plan
-  rabbitmq_region         = var.rabbitmq.region
-
 }
 
 module "production" {
@@ -161,9 +147,4 @@ module "production" {
   kubernetes_node_count   = var.kubernetes.node_count
 
   project                 = digitalocean_project.project.id
-
-  rabbitmq_name           = "${local.production}-rabbitmq"
-  rabbitmq_plan           = var.rabbitmq.plan
-  rabbitmq_region         = var.rabbitmq.region
-
 }

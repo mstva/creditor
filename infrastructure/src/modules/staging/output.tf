@@ -46,7 +46,3 @@ output "SPACE_SECRET_KEY" {
 output "SPACE_LOCATION_URL" {
   value = "https://${digitalocean_spaces_bucket.staging_bucket.bucket_domain_name}"
 }
-
-output "RABBITMQ_URL" {
-  value = cloudamqp_instance.staging_rabbitmq.url
-}

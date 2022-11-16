@@ -47,7 +47,3 @@ output "SPACE_SECRET_KEY" {
   value = var.bucket_secret_key
 }
 
-output "RABBITMQ_URL" {
-  value = cloudamqp_instance.development_rabbitmq.url
-}
-
