@@ -97,27 +97,72 @@ skip_credentials_validation = true
     ```shell
     docker compose run --rm terraform -chdir=src init -backend-config=backend.hcl
     ```
-- terraform plan
+
+---
+
+- terraform plan all
     ```shell
     docker compose run --rm terraform -chdir=src plan
     ```
-- terraform apply
+- terraform plan digitalocean
+    ```shell
+    docker compose run --rm terraform -chdir=src plan -target="module.digitalocean"
+    ```
+- terraform plan cloudamqp
+    ```shell
+    docker compose run --rm terraform -chdir=src plan -target="module.cloudamqp"
+    ```
+- terraform plan circleci
+    ```shell
+    docker compose run --rm terraform -chdir=src plan -target="module.circleci"
+    ```
+
+--- 
+ 
+- terraform apply all
     ```shell
     docker compose run --rm terraform -chdir=src apply --auto-approve
     ```
-- terraform destroy
+- terraform apply digitalocean
+    ```shell
+    docker compose run --rm terraform -chdir=src apply -target="module.digitalocean" --auto-approve
+    ```
+- terraform apply cloudamqp
+    ```shell
+    docker compose run --rm terraform -chdir=src apply -target="module.cloudamqp" --auto-approve
+    ```
+- terraform apply circleci
+    ```shell
+    docker compose run --rm terraform -chdir=src apply -target="module.circleci" --auto-approve
+    ```
+
+---
+
+- terraform destroy all
     ```shell
     docker compose run --rm terraform -chdir=src destroy --auto-approve
     ```
-- terraform output development
+- terraform destroy digitalocean
     ```shell
-    docker compose run --rm terraform -chdir=src output development
+    docker compose run --rm terraform -chdir=src destroy -target="module.digitalocean" --auto-approve
     ```
-- terraform output staging
+- terraform destroy cloudamqp
     ```shell
-    docker compose run --rm terraform -chdir=src output staging
+    docker compose run --rm terraform -chdir=src destroy -target="module.cloudamqp" --auto-approve
     ```
-- terraform output production
+- terraform destroy circleci
     ```shell
-    docker compose run --rm terraform -chdir=src output production
+    docker compose run --rm terraform -chdir=src destroy -target="module.circleci" --auto-approve
     ```
+
+---
+
+- terraform output digitalocean
+    ```shell
+    docker compose run --rm terraform -chdir=src output digitalocean
+    ```
+- terraform output cloudamqp
+    ```shell
+    docker compose run --rm terraform -chdir=src output cloudamqp
+    ```
+  
