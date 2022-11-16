@@ -125,7 +125,7 @@ workflows:
     jobs:
       - run_unit_tests:
           context:
-            - crewtech-base-context
+            - crewtech-common-context
           filters:
             branches:
               only:

@@ -24,7 +24,6 @@ variable "circleci_contexts" {
   type    = map(map(string))
   default = {
     common      = {}
-    base        = {}
     development = {}
     staging     = {}
     production  = {}
