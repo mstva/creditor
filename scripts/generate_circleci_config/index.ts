@@ -18,23 +18,15 @@ const run_unit_tests_job = () => {
     circleci_config.addJob(job)
     job.addStep(new CircleCI.commands.Checkout())
     job.addStep(new CircleCI.commands.Run({
-        name: "Install Poetry",
-        command: `pip3 install poetry`,
-    }))
-    job.addStep(new CircleCI.commands.Run({
-        name: "Export Poetry",
-        command: `poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test`,
-    }))
-    job.addStep(new CircleCI.commands.cache.Restore({
-        key: 'key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}'
-    }))
-    job.addStep(new CircleCI.commands.Run({
         name: "Install Packages",
-        command: `python3 -m venv venv; . venv/bin/activate; python -m pip install --upgrade pip; pip install -r requirements.txt;`,
-    }))
-    job.addStep(new CircleCI.commands.cache.Save({
-        key: 'deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}',
-        paths: ['venv']
+        working_directory: "backend",
+        command:
+            "python3 -m venv venv;\n" +
+            ". venv/bin/activate;\n" +
+            "python -m pip install --upgrade pip;\n" +
+            "pip install poetry;\n" +
+            "poetry config virtualenvs.create false --local;\n" +
+            "poetry install;",
     }))
     job.addStep(new CircleCI.commands.Run({
         name: "Run Pytest",
@@ -47,7 +39,7 @@ const run_unit_tests_job = () => {
 deploy_workflow.addJob(
     run_unit_tests_job(),
     {
-        context: ['crewtech-base-context'],
+        context: ['crewtech-common-context'],
         filters: {branches: {only: ["main"]}},
     }
 )

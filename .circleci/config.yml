@@ -19,22 +19,15 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Poetry
-          command: pip3 install poetry
-      - run:
-          name: Export Poetry
-          working_directory: backend
-          command: poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls --with-credentials --with dev --with test
-      - restore_cache:
-          key: 'key: deps1-{{ .Branch }}-{{ checksum "backend/requirements.txt" }}'
-      - run:
           name: Install Packages
           working_directory: backend
-          command: python3 -m venv venv; . venv/bin/activate; python -m pip install --upgrade pip; pip install -r requirements.txt;
-      - save_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "backend/requirements.txt" }}
-          paths:
-            - venv
+          command: |-
+            python3 -m venv venv;
+            . venv/bin/activate;
+            python -m pip install --upgrade pip;
+            pip install poetry;
+            poetry config virtualenvs.create false --local;
+            poetry install;
       - run:
           name: Run Pytest
           working_directory: backend
