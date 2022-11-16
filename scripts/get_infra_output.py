@@ -9,13 +9,20 @@ args = parser.parse_args()
 env = args.env
 compose = args.compose
 
-run_command = f'docker compose -f {compose} run --rm terraform -chdir=src output -json {env}'
 
-process = subprocess.run(run_command, shell=True, stdout=subprocess.PIPE)
-result = process.stdout.decode('utf-8')
-output = json.loads(result)
+def get_output(name):
+    command = f'docker compose -f {compose} run --rm terraform -chdir=src output -json {name}'
+    process = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+    result = process.stdout.decode('utf-8')
+    print(f"# {name} output")
+    try:
+        output = json.loads(result)
+        for item in output[env]:
+            print(f"{item}={output[env][item]}")
+    except Exception as e:
+        print(f'No output for digitalocean | {e}\n')
 
-for item in output:
-    print(f"{item}={output[item]}")
 
+get_output(name="digitalocean")
+get_output(name="cloudamqp")
 
