@@ -27,12 +27,6 @@ provider "cloudamqp" {
   apikey = var.cloudamqp.api_key
 }
 
-provider "circleci" {
-  api_token    = var.circleci.api_token
-  vcs_type     = var.circleci.vcs_type
-  organization = var.circleci.organization
-}
-
 locals {
   common = "${var.project_name}-${var.environment.common}"
   base = "${var.project_name}-${var.environment.base}"
@@ -49,28 +43,6 @@ resource "digitalocean_project" "project" {
 resource "digitalocean_ssh_key" "ssh_key" {
   name       = "${var.project_name}_ssh_key"
   public_key = file("${path.module}/.ssh/id_rsa.pub")
-}
-
-resource "circleci_context" "common_context" {
-  name = "${local.common}-context"
-}
-
-resource "circleci_context_environment_variable" "common_env_variables" {
-  for_each   = var.common_env
-  variable   = each.key
-  value      = each.value
-  context_id = circleci_context.common_context.id
-}
-
-resource "circleci_context" "base_context" {
-  name = "${local.base}-context"
-}
-
-resource "circleci_context_environment_variable" "base_env_variables" {
-  for_each   = var.base_env
-  variable   = each.key
-  value      = each.value
-  context_id = circleci_context.base_context.id
 }
 
 module "development" {
@@ -112,8 +84,6 @@ module "development" {
   rabbitmq_plan           = var.rabbitmq.plan
   rabbitmq_region         = var.rabbitmq.region
 
-  context_name            = "${local.development}-context"
-  context_env             = var.development_env
 }
 
 module "staging" {
@@ -155,8 +125,6 @@ module "staging" {
   rabbitmq_plan           = var.rabbitmq.plan
   rabbitmq_region         = var.rabbitmq.region
 
-  context_name            = "${local.staging}-context"
-  context_env             = var.staging_env
 }
 
 module "production" {
@@ -198,6 +166,4 @@ module "production" {
   rabbitmq_plan           = var.rabbitmq.plan
   rabbitmq_region         = var.rabbitmq.region
 
-  context_name            = "${local.production}-context"
-  context_env             = var.production_env
 }

@@ -32,31 +32,35 @@ circleci = {
   organization = ""
 }
 
-common_env = {
-  CIRCLE_TOKEN       = ""
-  CIRCLE_OWNER_ID    = ""
-  DOCKERHUB_USERNAME = ""
-  DOCKERHUB_PASS     = ""
-}
+circleci_contexts = {
 
-base_env = { 
-  # copy base environment variables like this
-  ENV_VAR = "ENV_VALUE"
-}
+  common = {
+    CIRCLE_TOKEN       = ""
+    CIRCLE_OWNER_ID    = ""
+    DOCKERHUB_USERNAME = ""
+    DOCKERHUB_PASS     = ""
+  }
 
-development_env = {
-  # copy development environment variables like this
-  ENV_VAR = "ENV_VALUE"
-}
+  base = {
+    # copy the base environment variables like this
+    ENV_VAR = "ENV_VALUE"
+  }
 
-staging_env = {
-  # copy staging environment variables like this
-  ENV_VAR = "ENV_VALUE"
-}
+  development = {
+    # copy the development environment variables like this
+    ENV_VAR = "ENV_VALUE"
+  }
 
-production_env = {
-  # copy production environment variables like this
-  ENV_VAR = "ENV_VALUE"
+  staging = {
+    # copy the staging environment variables like this
+    ENV_VAR = "ENV_VALUE"
+  }
+
+  production = {
+    # copy the production environment variables like this
+    ENV_VAR = "ENV_VALUE"
+  }
+  
 }
 
 # How to create new token for digital ocean

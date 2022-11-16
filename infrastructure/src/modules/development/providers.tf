@@ -6,8 +6,5 @@ terraform {
     cloudamqp = {
       source = "cloudamqp/cloudamqp"
     }
-    circleci = {
-      source  = "mrolla/circleci"
-    }
   }
 }
