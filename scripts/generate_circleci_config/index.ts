@@ -13,8 +13,26 @@ const resource_class = "large"
 const image = "ubuntu-2204:2022.10.1"
 const ubuntu = new CircleCI.executors.MachineExecutor(resource_class, image)
 
+const postgres_image = new CircleCI.types.executors.docker.DockerImage(
+    "cimg/postgres:13.8",
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    {
+        "DATABASE_NAME": "$POSTGRES_DB",
+        "DATABASE_USER": "$POSTGRES_USER",
+        "DATABASE_PASSWORD": "$POSTGRES_PASSWORD",
+        "DATABASE_HOST": "$POSTGRES_HOST",
+        "DATABASE_PORT": "$POSTGRES_PORT",
+    }
+)
+
+const docker_python = new CircleCI.executors.DockerExecutor("cimg/python:3.10", "medium")
+docker_python.addServiceImage(postgres_image)
+
 const run_unit_tests_job = () => {
-    const job = new CircleCI.Job(`run_unit_tests`, ubuntu)
+    const job = new CircleCI.Job(`run_unit_tests`, docker_python)
     circleci_config.addJob(job)
     job.addStep(new CircleCI.commands.Checkout())
     job.addStep(new CircleCI.commands.Run({

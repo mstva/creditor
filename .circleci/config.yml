@@ -7,15 +7,15 @@ setup: false
 jobs:
   run_unit_tests:
     docker:
-      - image: "cimg/python:3.10"
-      - image: "cimg/postgres:13.8"
+      - image: cimg/python:3.10
+      - image: cimg/postgres:13.8
         environment:
           DATABASE_NAME: $POSTGRES_DB
           DATABASE_USER: $POSTGRES_USER
           DATABASE_PASSWORD: $POSTGRES_PASSWORD
           DATABASE_HOST: $POSTGRES_HOST
           DATABASE_PORT: $POSTGRES_PORT
-    resource_class: large
+    resource_class: medium
     steps:
       - checkout
       - run:
