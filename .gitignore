@@ -16,7 +16,7 @@ migrations
 .terraform
 .terraform.lock.hcl
 .backend.hcl
-secrets.auto.tfvars
+.secrets.auto.tfvars
 
 # scripts
 node_modules
