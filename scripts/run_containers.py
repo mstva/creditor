@@ -25,14 +25,14 @@ if result != "":
 run_django_container = f'echo "run_django_container";' \
                        f'docker run -d -p 80:8000 ' \
                        f'--env-file .env.{env} ' \
-                       f'--name crewtech_django_{env} ' \
+                       f'--name creditor_django_{env} ' \
                        f'{image}:{env} ' \
                        f'/bin/bash -c "chmod +x ./entrypoint.sh && sh ./entrypoint.sh"'
 
 run_celery_container = f'echo "run_celery_container";' \
                        f'docker run -d ' \
                        f'--env-file .env.{env} ' \
-                       f'--name crewtech_celery_{env} ' \
+                       f'--name creditor_celery_{env} ' \
                        f'{image}:{env} ' \
                        f'/bin/bash -c "/opt/venv/bin/celery -A src worker -l INFO"'
 

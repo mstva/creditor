@@ -57,7 +57,7 @@ const run_unit_tests_job = () => {
 deploy_workflow.addJob(
     run_unit_tests_job(),
     {
-        context: ['crewtech-common-context'],
+        context: ['creditor-common-context'],
         filters: {branches: {only: ["main"]}},
     }
 )
@@ -70,7 +70,7 @@ const ENV = {
 const ENV_LIST = [ENV.DEVELOPMENT, ENV.STAGING, ENV.PRODUCTION]
 
 const get_steps = (env: string) => {
-    const image = "crewtech"
+    const image = "creditor"
     return {
         login_to_docker_hub: {
             name: "Login to docker hub",
@@ -105,7 +105,7 @@ const get_steps = (env: string) => {
 
 const get_parameters = (env: string) => {
     const parameters: WorkflowJobParameters = {
-        context: ["crewtech-common-context", `crewtech-${env}-context`],
+        context: ["creditor-common-context", `creditor-${env}-context`],
         filters: {branches: {only: ["main"]}},
     }
 

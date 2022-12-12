@@ -43,10 +43,10 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build a docker image
-          command: docker build -t $DOCKERHUB_USERNAME/crewtech:development -f backend/Dockerfile backend
+          command: docker build -t $DOCKERHUB_USERNAME/creditor:development -f backend/Dockerfile backend
       - run:
           name: Push to docker hub
-          command: docker push $DOCKERHUB_USERNAME/crewtech:development
+          command: docker push $DOCKERHUB_USERNAME/creditor:development
       - run:
           name: Get the environment variables from CircleCI
           command: python3 scripts/get_circleci_env.py --env=development --token=$CIRCLE_TOKEN --owner=$CIRCLE_OWNER_ID
@@ -58,7 +58,7 @@ jobs:
           command: rsync .env.development scripts/run_containers.py root@$SERVER_IP:/root
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'source .env.development && python3 run_containers.py --env=development --image=$DOCKERHUB_USERNAME/crewtech'
+          command: ssh root@$SERVER_IP 'source .env.development && python3 run_containers.py --env=development --image=$DOCKERHUB_USERNAME/creditor'
   deploy_staging_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -70,10 +70,10 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build a docker image
-          command: docker build -t $DOCKERHUB_USERNAME/crewtech:staging -f backend/Dockerfile backend
+          command: docker build -t $DOCKERHUB_USERNAME/creditor:staging -f backend/Dockerfile backend
       - run:
           name: Push to docker hub
-          command: docker push $DOCKERHUB_USERNAME/crewtech:staging
+          command: docker push $DOCKERHUB_USERNAME/creditor:staging
       - run:
           name: Get the environment variables from CircleCI
           command: python3 scripts/get_circleci_env.py --env=staging --token=$CIRCLE_TOKEN --owner=$CIRCLE_OWNER_ID
@@ -85,7 +85,7 @@ jobs:
           command: rsync .env.staging scripts/run_containers.py root@$SERVER_IP:/root
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'source .env.staging && python3 run_containers.py --env=staging --image=$DOCKERHUB_USERNAME/crewtech'
+          command: ssh root@$SERVER_IP 'source .env.staging && python3 run_containers.py --env=staging --image=$DOCKERHUB_USERNAME/creditor'
   deploy_production_environment:
     machine:
       image: ubuntu-2204:2022.10.1
@@ -97,10 +97,10 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build a docker image
-          command: docker build -t $DOCKERHUB_USERNAME/crewtech:production -f backend/Dockerfile backend
+          command: docker build -t $DOCKERHUB_USERNAME/creditor:production -f backend/Dockerfile backend
       - run:
           name: Push to docker hub
-          command: docker push $DOCKERHUB_USERNAME/crewtech:production
+          command: docker push $DOCKERHUB_USERNAME/creditor:production
       - run:
           name: Get the environment variables from CircleCI
           command: python3 scripts/get_circleci_env.py --env=production --token=$CIRCLE_TOKEN --owner=$CIRCLE_OWNER_ID
@@ -112,21 +112,21 @@ jobs:
           command: rsync .env.production scripts/run_containers.py root@$SERVER_IP:/root
       - run:
           name: Run the script
-          command: ssh root@$SERVER_IP 'source .env.production && python3 run_containers.py --env=production --image=$DOCKERHUB_USERNAME/crewtech'
+          command: ssh root@$SERVER_IP 'source .env.production && python3 run_containers.py --env=production --image=$DOCKERHUB_USERNAME/creditor'
 workflows:
   deploy:
     jobs:
       - run_unit_tests:
           context:
-            - crewtech-common-context
+            - creditor-common-context
           filters:
             branches:
               only:
                 - main
       - deploy_development_environment:
           context:
-            - crewtech-common-context
-            - crewtech-development-context
+            - creditor-common-context
+            - creditor-development-context
           filters:
             branches:
               only:
@@ -135,8 +135,8 @@ workflows:
             - run_unit_tests
       - deploy_staging_environment:
           context:
-            - crewtech-common-context
-            - crewtech-staging-context
+            - creditor-common-context
+            - creditor-staging-context
           filters:
             branches:
               only:
@@ -146,8 +146,8 @@ workflows:
             - deploy_development_environment
       - deploy_production_environment:
           context:
-            - crewtech-common-context
-            - crewtech-production-context
+            - creditor-common-context
+            - creditor-production-context
           filters:
             branches:
               only:

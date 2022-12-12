@@ -19,5 +19,5 @@ terraform {
 
 variable "project_name" {
   type = string
-  default = "crewtech"
+  default = "creditor"
 }

@@ -3,8 +3,8 @@ version: '3.9'
 services:
 
   django:
-    image: crewtech_production
-    container_name: crewtech_production_django
+    image: creditor_production
+    container_name: creditor_production_django
     build:
       context: ..
       dockerfile: Dockerfile
@@ -20,8 +20,8 @@ services:
     command: sh -c "chmod +x ./entrypoint.sh && sh ./entrypoint.sh"
 
   celery:
-    image: crewtech_production
-    container_name: crewtech_production_celery
+    image: creditor_production
+    container_name: creditor_production_celery
     build:
       context: ..
       dockerfile: Dockerfile

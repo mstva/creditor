@@ -3,8 +3,8 @@ version: '3.9'
 services:
 
   django:
-    image: crewtech_base
-    container_name: crewtech_base_django
+    image: creditor_base
+    container_name: creditor_base_django
     build:
       context: ..
       dockerfile: Dockerfile
@@ -21,7 +21,7 @@ services:
 
   postgres:
     image: postgres:13-alpine
-    container_name: crewtech_base_postgres
+    container_name: creditor_base_postgres
     env_file:
       - ../.env/.env.base
     ports:
@@ -31,7 +31,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:management-alpine
-    container_name: crewtech_base_rabbitmq
+    container_name: creditor_base_rabbitmq
     env_file:
       - ../.env/.env.base
     ports:
@@ -42,15 +42,15 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: crewtech_base_redis
+    container_name: creditor_base_redis
     ports:
       - "6379:6379"
     volumes:
       - ../../.volumes/redis_data:/data
 
   celery:
-    image: crewtech_base
-    container_name: crewtech_base_celery
+    image: creditor_base
+    container_name: creditor_base_celery
     build:
       context: ..
       dockerfile: Dockerfile

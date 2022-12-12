@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "crewtech_api"
+name = "backend"
 version = "0.1.0"
-description = "Crewtech Backend API."
+description = "Backend API."
 authors = ["mstva <mustafa.abdulluh@gmail.com>"]
 readme = "README.md"
 

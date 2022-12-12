@@ -86,8 +86,8 @@ variable "digitalocean_common" {
       version    = "14"
       size       = "db-s-1vcpu-1gb"
       node_count = "1"
-      name       = "crewtech_db"
-      user       = "crewtech_user"
+      name       = "creditor_db"
+      user       = "creditor_user"
     }
 
     kubernetes = {
